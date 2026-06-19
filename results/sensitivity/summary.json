@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "sl6-maidenhead",
+    "proxy_standalone_mae": 10.802,
+    "mae_before": 10.333,
+    "mae_after": 10.639,
+    "hit_before": 0.332,
+    "hit_after": 0.325,
+    "verdict_before": "QUARANTINE",
+    "verdict_after": "QUARANTINE"
+  },
+  {
+    "slug": "ub3-hayes",
+    "proxy_standalone_mae": 17.946,
+    "mae_before": 10.0,
+    "mae_after": 10.262,
+    "hit_before": 0.406,
+    "hit_after": 0.367,
+    "verdict_before": "QUARANTINE",
+    "verdict_after": "QUARANTINE"
+  },
+  {
+    "slug": "w13-west-ealing",
+    "proxy_standalone_mae": 11.652,
+    "mae_before": 10.864,
+    "mae_after": 10.338,
+    "hit_before": 0.333,
+    "hit_after": 0.302,
+    "verdict_before": "QUARANTINE",
+    "verdict_after": "QUARANTINE"
+  }
+]

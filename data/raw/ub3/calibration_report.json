@@ -1,0 +1,57 @@
+{
+  "counts": {
+    "n_sample": 926,
+    "n_scored": 764,
+    "n_refused": 162
+  },
+  "stats": {
+    "mae": 10.0,
+    "q80": 25.047,
+    "bias": 4.919,
+    "hit_rate": 0.406,
+    "wilson": [
+      0.359,
+      0.456
+    ],
+    "high_tier_coverage": 0.399
+  },
+  "verdict": {
+    "verdict": "QUARANTINE",
+    "H_pct": null,
+    "bias_correction_pct": 0.0
+  },
+  "gates": [
+    {
+      "metric": "mae",
+      "gate_id": "H4",
+      "score": 10.0,
+      "threshold": 10.0,
+      "success": false,
+      "reason": "MAE 10.00% (PASS band <5, wider <10)"
+    },
+    {
+      "metric": "bias",
+      "gate_id": "H5",
+      "score": 4.919,
+      "threshold": 2.0,
+      "success": false,
+      "reason": "bias +4.92%"
+    },
+    {
+      "metric": "hit_rate",
+      "gate_id": "H6",
+      "score": 0.406,
+      "threshold": 0.7,
+      "success": false,
+      "reason": "hit rate 0.41, Wilson lower 0.36"
+    },
+    {
+      "metric": "abstain_quality",
+      "gate_id": "H7",
+      "score": 0.571,
+      "threshold": 0.8,
+      "success": false,
+      "reason": "precision=0.57, recall=0.58"
+    }
+  ]
+}

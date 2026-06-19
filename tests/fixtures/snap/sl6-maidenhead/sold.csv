@@ -1,0 +1,3 @@
+unique_id,price_paid,deed_date,postcode,property_type,new_build,estate_type,paon,street,transaction_category
+PP-1,635000,2024-09-15,SL6 7AB,S,N,F,12,EXAMPLE ROAD,A
+PP-2,498000,2025-02-02,SL6 7AB,T,N,F,3,EXAMPLE ROAD,A

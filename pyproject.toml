@@ -1,0 +1,25 @@
+[project]
+name = "house_price_tool"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["pandas>=2.0", "pydantic>=2.0", "numpy>=1.24", "faiss-cpu>=1.7"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+build = ["requests>=2.31"]
+llm = ["anthropic>=0.40"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+markers = [
+  "contract: zero-network format and grader-validation checks (Layer 1)",
+  "component: module-level fixture checks (Layer 2)",
+  "release: full gate catalog against the calibration sample (Layer 3)",
+]

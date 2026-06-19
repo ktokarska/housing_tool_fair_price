@@ -1,0 +1,22 @@
+{
+  "snapshot_date": "2026-06-19",
+  "methodology_version": "2.1",
+  "sources": {
+    "land_registry": "https://landregistry.data.gov.uk/landregistry/query",
+    "epc": "https://find-energy-certificate.service.gov.uk"
+  },
+  "geographies": {
+    "sl6-maidenhead": {
+      "files": {
+        "sold.csv": {
+          "sha256": "6f6f40bdceb847f6ce02d797bb271ca4d524259439e0d2b2f68a3191ffde795c",
+          "rows": 2
+        },
+        "epc.csv": {
+          "sha256": "0539cee2c0d8d00186aab0e620f38e5ddeca133376a71057a951d3fc62e3f128",
+          "rows": 2
+        }
+      }
+    }
+  }
+}

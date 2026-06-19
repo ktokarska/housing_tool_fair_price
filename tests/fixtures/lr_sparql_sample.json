@@ -1,0 +1,16 @@
+{
+  "results": {
+    "bindings": [
+      {
+        "transactionId": {"value": "PP-1"},
+        "pricePaid": {"value": "635000"},
+        "transactionDate": {"value": "2024-09-15"},
+        "postcode": {"value": "SL6 7AB"},
+        "propertyType": {"value": "http://landregistry.data.gov.uk/def/common/semi-detached"},
+        "paon": {"value": "12"},
+        "street": {"value": "EXAMPLE ROAD"},
+        "transactionCategory": {"value": "http://landregistry.data.gov.uk/def/ppi/standardPricePaidTransaction"}
+      }
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "slug": "ub3-hayes",
+  "name": "Hayes (UB3)",
+  "production": {
+    "run_mode": "headless",
+    "gate": "NOT_IN_DEMO",
+    "message": "Not part of the demo, calibration needed",
+    "reason": "ub3-hayes: NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)",
+    "verdict_shown": false
+  },
+  "engine_preview": {
+    "subject_label": "Semi-detached in UB3 1AH",
+    "geography": "ub3-hayes",
+    "methodology_version": "2.1",
+    "snapshot_date": "2026-06-19",
+    "estimates": {
+      "m1": 553673,
+      "m2": 508646
+    },
+    "confidence": "High",
+    "value_range": [
+      504602,
+      557717
+    ],
+    "verdict": "SUSPICIOUS",
+    "detail": "SUSPICIOUS \u2014 asking 16.8% below bottom of range (verify tenure / defect / planning / data error before treating as an opportunity)",
+    "abstain": false,
+    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "metrics": [
+      {
+        "metric": "geography_gate",
+        "gate_id": "H1",
+        "score": 1.0,
+        "threshold": 1.0,
+        "success": true,
+        "reason": "ub3-hayes: NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)"
+      },
+      {
+        "metric": "source_provenance",
+        "gate_id": "H2",
+        "score": 1.0,
+        "threshold": 1.0,
+        "success": true,
+        "reason": "all figures trace to snapshot rows"
+      },
+      {
+        "metric": "recall@K",
+        "gate_id": "H3",
+        "score": 0.5789,
+        "threshold": 0.95,
+        "success": false,
+        "reason": "11/19 rule-valid comps retrieved in top-20"
+      },
+      {
+        "metric": "sqft_provenance",
+        "gate_id": "H9",
+        "score": 1.0,
+        "threshold": 1.0,
+        "success": true,
+        "reason": "estimate sourced from EPC floor area"
+      },
+      {
+        "metric": "single_label",
+        "gate_id": "H8",
+        "score": 1.0,
+        "threshold": 1.0,
+        "success": true,
+        "reason": "verdict 'SUSPICIOUS' at High confidence"
+      },
+      {
+        "metric": "explanation_faithfulness",
+        "gate_id": "H10",
+        "score": 1.0,
+        "threshold": 0.8,
+        "success": true,
+        "reason": "number_match ok; faithfulness 5"
+      }
+    ],
+    "asking": 420000,
+    "explanation_is_placeholder": true,
+    "disclaimer": "Gate bypassed for illustration. ub3-hayes is QUARANTINE, so production withholds this result. Asking shown is the property's real sold price."
+  }
+}

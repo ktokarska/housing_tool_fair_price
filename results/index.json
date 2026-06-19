@@ -1,0 +1,35 @@
+{
+  "generated_for": "2026-06-19",
+  "areas": [
+    {
+      "slug": "sl6-maidenhead",
+      "name": "Maidenhead (SL6)",
+      "verdict": "QUARANTINE",
+      "date": "2026-06-19",
+      "methods_present": [
+        "M1",
+        "M2"
+      ]
+    },
+    {
+      "slug": "ub3-hayes",
+      "name": "Hayes (UB3)",
+      "verdict": "QUARANTINE",
+      "date": "2026-06-19",
+      "methods_present": [
+        "M1",
+        "M2"
+      ]
+    },
+    {
+      "slug": "w13-west-ealing",
+      "name": "West Ealing (W13)",
+      "verdict": "QUARANTINE",
+      "date": "2026-06-19",
+      "methods_present": [
+        "M1",
+        "M2"
+      ]
+    }
+  ]
+}

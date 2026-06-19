@@ -1,0 +1,38 @@
+{
+  "slug": "w13-west-ealing",
+  "proxy_model": {
+    "n_model": 662,
+    "standalone_mae_pct": 11.652,
+    "standalone_meanape_pct": 29.622
+  },
+  "baseline_M1_M2": {
+    "verdict": "QUARANTINE",
+    "stats": {
+      "mae": 10.864,
+      "q80": 25.856,
+      "bias": 1.735,
+      "hit_rate": 0.333,
+      "wilson": [
+        0.291,
+        0.379
+      ],
+      "high_tier_coverage": 0.289
+    }
+  },
+  "with_proxy_M1_M2_M3": {
+    "verdict": "QUARANTINE",
+    "stats": {
+      "mae": 10.338,
+      "q80": 24.127,
+      "bias": 1.889,
+      "hit_rate": 0.302,
+      "wilson": [
+        0.259,
+        0.348
+      ],
+      "high_tier_coverage": 0.282
+    }
+  },
+  "verdict_changed": false,
+  "note": "PROXY third method (open-data hedonic OLS), NOT a real AVM. Built from the same Land Registry + EPC data as M1/M2, so correlated; treat as a lower bound on what an independent commercial AVM might contribute."
+}

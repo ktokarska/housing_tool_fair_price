@@ -1,0 +1,38 @@
+{
+  "slug": "sl6-maidenhead",
+  "proxy_model": {
+    "n_model": 1950,
+    "standalone_mae_pct": 10.802,
+    "standalone_meanape_pct": 36.805
+  },
+  "baseline_M1_M2": {
+    "verdict": "QUARANTINE",
+    "stats": {
+      "mae": 10.333,
+      "q80": 22.962,
+      "bias": 0.032,
+      "hit_rate": 0.332,
+      "wilson": [
+        0.307,
+        0.358
+      ],
+      "high_tier_coverage": 0.288
+    }
+  },
+  "with_proxy_M1_M2_M3": {
+    "verdict": "QUARANTINE",
+    "stats": {
+      "mae": 10.639,
+      "q80": 22.94,
+      "bias": 0.533,
+      "hit_rate": 0.325,
+      "wilson": [
+        0.302,
+        0.349
+      ],
+      "high_tier_coverage": 0.279
+    }
+  },
+  "verdict_changed": false,
+  "note": "PROXY third method (open-data hedonic OLS), NOT a real AVM. Built from the same Land Registry + EPC data as M1/M2, so correlated; treat as a lower bound on what an independent commercial AVM might contribute."
+}
