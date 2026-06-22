@@ -1,0 +1,86 @@
+{
+  "expected_behavior": "Real numbers; confidence/range honest; no overclaim.",
+  "input_id": "I3",
+  "output": {
+    "abstain": false,
+    "confidence": "High",
+    "detail": "UNDERPRICED by 14.8% — investigate",
+    "estimates": {
+      "m1": 553673,
+      "m2": 508646
+    },
+    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "geography": "ub3-hayes",
+    "methodology_version": "2.1",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "ub3-hayes: NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H2",
+        "metric": "source_provenance",
+        "reason": "all figures trace to snapshot rows",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H3",
+        "metric": "recall@K",
+        "reason": "11/19 rule-valid comps retrieved in top-20",
+        "score": 0.5789,
+        "success": false,
+        "threshold": 0.95
+      },
+      {
+        "gate_id": "H9",
+        "metric": "sqft_provenance",
+        "reason": "estimate sourced from EPC floor area",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H8",
+        "metric": "single_label",
+        "reason": "verdict 'UNDERPRICED — investigate' at High confidence",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H10",
+        "metric": "explanation_faithfulness",
+        "reason": "number_match ok; faithfulness 5",
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.8
+      }
+    ],
+    "snapshot_date": "2026-06-19",
+    "subject_label": "Semi-detached in UB3 1AH",
+    "value_range": [
+      504602,
+      557717
+    ],
+    "verdict": "UNDERPRICED — investigate"
+  },
+  "spec": {
+    "asking": 430000,
+    "geo_fault": null,
+    "geo_slug": "ub3-hayes",
+    "property_type": "S",
+    "run_mode": "headless",
+    "skip_gate": true,
+    "snapshot_fault": false,
+    "sub_postcode": "UB3 1",
+    "subject_id": "1061746E-3905-3C34-E063-4804A8C0F9E7"
+  },
+  "stresses": "An area quarantined on coverage; honest low-confidence framing.",
+  "title": "UB3 coverage-quarantine subject"
+}

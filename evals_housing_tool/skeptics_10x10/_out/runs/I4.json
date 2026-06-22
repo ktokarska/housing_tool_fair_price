@@ -1,0 +1,31 @@
+{
+  "expected_behavior": "Withhold: NOT_IN_DEMO, reason cites the QUARANTINE verdict.",
+  "input_id": "I4",
+  "output": {
+    "gate": "NOT_IN_DEMO",
+    "message": "Not part of the demo, calibration needed",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "sl6-maidenhead: NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      }
+    ]
+  },
+  "spec": {
+    "asking": null,
+    "geo_fault": null,
+    "geo_slug": "sl6-maidenhead",
+    "property_type": "S",
+    "run_mode": "headless",
+    "skip_gate": false,
+    "snapshot_fault": false,
+    "sub_postcode": "SL6 2",
+    "subject_id": null
+  },
+  "stresses": "The geography gate on a quarantined area.",
+  "title": "SL6 production run (gate ON)"
+}

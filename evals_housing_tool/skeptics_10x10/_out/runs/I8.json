@@ -1,0 +1,85 @@
+{
+  "expected_behavior": "Method 2 unavailable; no fabricated sq ft; H9 green.",
+  "input_id": "I8",
+  "output": {
+    "abstain": true,
+    "confidence": "Low",
+    "detail": "INDETERMINATE — fair-value range £474,705-£580,195, single method only; recommend resolving data gaps (verified sq ft / full address / desktop valuation) before any directional read.",
+    "estimates": {
+      "m1": 527450
+    },
+    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "geography": "sl6-maidenhead",
+    "methodology_version": "2.1",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "sl6-maidenhead: NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H2",
+        "metric": "source_provenance",
+        "reason": "all figures trace to snapshot rows",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H3",
+        "metric": "recall@K",
+        "reason": "10/16 rule-valid comps retrieved in top-20",
+        "score": 0.625,
+        "success": false,
+        "threshold": 0.95
+      },
+      {
+        "gate_id": "H9",
+        "metric": "sqft_provenance",
+        "reason": "method correctly unavailable: no EPC floor area",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H8",
+        "metric": "single_label",
+        "reason": "verdict 'INDETERMINATE' at Low confidence",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H10",
+        "metric": "explanation_faithfulness",
+        "reason": "number_match ok; faithfulness 5",
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.8
+      }
+    ],
+    "snapshot_date": "2026-06-19",
+    "subject_label": "Terraced in SL6 0DH",
+    "value_range": [
+      474705,
+      580195
+    ],
+    "verdict": "INDETERMINATE"
+  },
+  "spec": {
+    "asking": 520000,
+    "geo_fault": null,
+    "geo_slug": "sl6-maidenhead",
+    "property_type": "T",
+    "run_mode": "headless",
+    "skip_gate": true,
+    "snapshot_fault": false,
+    "sub_postcode": "SL6 0",
+    "subject_id": "237B17FD-AB9D-22AC-E063-4804A8C0EA3A"
+  },
+  "stresses": "Method 2 has no square-foot source.",
+  "title": "Subject with no EPC"
+}

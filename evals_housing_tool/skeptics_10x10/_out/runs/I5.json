@@ -1,0 +1,31 @@
+{
+  "expected_behavior": "NOT_IN_DEMO with the exact 'Not part of the demo' message.",
+  "input_id": "I5",
+  "output": {
+    "gate": "NOT_IN_DEMO",
+    "message": "Not part of the demo, calibration needed",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "tw8-brentford: NOT_IN_DEMO (no calibration on record for this area)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      }
+    ]
+  },
+  "spec": {
+    "asking": null,
+    "geo_fault": "uncalibrated",
+    "geo_slug": "tw8-brentford",
+    "property_type": "S",
+    "run_mode": "headless",
+    "skip_gate": false,
+    "snapshot_fault": false,
+    "sub_postcode": "TW8 0",
+    "subject_id": null
+  },
+  "stresses": "An area with no calibration on record.",
+  "title": "Uncalibrated area, headless"
+}

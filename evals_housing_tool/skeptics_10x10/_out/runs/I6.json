@@ -1,0 +1,31 @@
+{
+  "expected_behavior": "NOT_IN_DEMO; reason cites the stale-age rule.",
+  "input_id": "I6",
+  "output": {
+    "gate": "NOT_IN_DEMO",
+    "message": "Not part of the demo, calibration needed",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "sl6-maidenhead: NOT_IN_DEMO (calibration is 169 days old, older than 90 days)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      }
+    ]
+  },
+  "spec": {
+    "asking": null,
+    "geo_fault": "expired",
+    "geo_slug": "sl6-maidenhead",
+    "property_type": "S",
+    "run_mode": "headless",
+    "skip_gate": false,
+    "snapshot_fault": false,
+    "sub_postcode": "SL6 2",
+    "subject_id": null
+  },
+  "stresses": "A calibration older than the 90-day window.",
+  "title": "Expired (>90d) calibration"
+}

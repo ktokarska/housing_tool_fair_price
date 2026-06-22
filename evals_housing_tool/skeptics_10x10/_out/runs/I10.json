@@ -1,0 +1,80 @@
+{
+  "expected_behavior": "Abstain decision internally consistent with the spread it computed.",
+  "input_id": "I10",
+  "output": {
+    "abstain": true,
+    "confidence": null,
+    "detail": "0 methods available — record the listing and the data gaps.",
+    "estimates": {},
+    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "geography": "ub3-hayes",
+    "methodology_version": "2.1",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "ub3-hayes: NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H2",
+        "metric": "source_provenance",
+        "reason": "all figures trace to snapshot rows",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H3",
+        "metric": "recall@K",
+        "reason": "1/1 rule-valid comps retrieved in top-20",
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.95
+      },
+      {
+        "gate_id": "H9",
+        "metric": "sqft_provenance",
+        "reason": "method correctly unavailable: no segment £/sq ft",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H8",
+        "metric": "single_label",
+        "reason": "verdict 'NO VERDICT' at None confidence",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H10",
+        "metric": "explanation_faithfulness",
+        "reason": "number_match ok; faithfulness 5",
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.8
+      }
+    ],
+    "snapshot_date": "2026-06-19",
+    "subject_label": "Detached in UB3 3JT",
+    "value_range": null,
+    "verdict": "NO VERDICT"
+  },
+  "spec": {
+    "asking": 600000,
+    "geo_fault": null,
+    "geo_slug": "ub3-hayes",
+    "property_type": "D",
+    "run_mode": "headless",
+    "skip_gate": true,
+    "snapshot_fault": false,
+    "sub_postcode": "UB3 3",
+    "subject_id": "1EAE3DF7-6AE5-9EB1-E063-4704A8C09D02"
+  },
+  "stresses": "A sparse segment near the 20% abstain boundary.",
+  "title": "Thin-comp, high-divergence subject (abstain boundary)"
+}

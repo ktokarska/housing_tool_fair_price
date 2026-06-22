@@ -1,0 +1,31 @@
+{
+  "expected_behavior": "NOT_IN_DEMO; reason cites the version gate.",
+  "input_id": "I7",
+  "output": {
+    "gate": "NOT_IN_DEMO",
+    "message": "Not part of the demo, calibration needed",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "sl6-maidenhead: NOT_IN_DEMO (calibration ran under methodology 2.0, current is 2.1)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      }
+    ]
+  },
+  "spec": {
+    "asking": null,
+    "geo_fault": "version",
+    "geo_slug": "sl6-maidenhead",
+    "property_type": "S",
+    "run_mode": "headless",
+    "skip_gate": false,
+    "snapshot_fault": false,
+    "sub_postcode": "SL6 2",
+    "subject_id": null
+  },
+  "stresses": "A calibration produced under an older methodology version.",
+  "title": "Methodology version mismatch"
+}

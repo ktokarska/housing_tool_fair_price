@@ -201,9 +201,12 @@ def execute(spec: InputSpec) -> dict:
                 llm_client=FakeLLMClient(PLACEHOLDER),
                 judge_client=FakeLLMClient("Score: 5"))
         except SnapshotIntegrityError as e:
-            return {"halted": True, "error_type": "SnapshotIntegrityError", "error": str(e)}
+            # Strip the volatile temp path so the captured output stays deterministic (G9).
+            msg = str(e).replace(str(snapshot_root), "<snapshot>")
+            return {"halted": True, "error_type": "SnapshotIntegrityError", "error": msg}
         except Exception as e:  # any other halt is still a (different) halt, recorded honestly
-            return {"halted": True, "error_type": type(e).__name__, "error": str(e)}
+            msg = str(e).replace(str(snapshot_root), "<snapshot>")
+            return {"halted": True, "error_type": type(e).__name__, "error": msg}
         return _normalize(out)
     finally:
         for d in cleanup:

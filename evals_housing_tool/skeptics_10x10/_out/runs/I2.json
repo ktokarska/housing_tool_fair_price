@@ -1,0 +1,86 @@
+{
+  "expected_behavior": "Abstain decision consistent with the computed spread/confidence.",
+  "input_id": "I2",
+  "output": {
+    "abstain": false,
+    "confidence": "High",
+    "detail": "SUSPICIOUS — asking 22.9% below bottom of range (verify tenure / defect / planning / data error before treating as an opportunity)",
+    "estimates": {
+      "m1": 785250,
+      "m2": 715786
+    },
+    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "geography": "w13-west-ealing",
+    "methodology_version": "2.1",
+    "metrics": [
+      {
+        "gate_id": "H1",
+        "metric": "geography_gate",
+        "reason": "w13-west-ealing: NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H2",
+        "metric": "source_provenance",
+        "reason": "all figures trace to snapshot rows",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H3",
+        "metric": "recall@K",
+        "reason": "6/6 rule-valid comps retrieved in top-20",
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.95
+      },
+      {
+        "gate_id": "H9",
+        "metric": "sqft_provenance",
+        "reason": "estimate sourced from EPC floor area",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H8",
+        "metric": "single_label",
+        "reason": "verdict 'SUSPICIOUS' at High confidence",
+        "score": 1.0,
+        "success": true,
+        "threshold": 1.0
+      },
+      {
+        "gate_id": "H10",
+        "metric": "explanation_faithfulness",
+        "reason": "number_match ok; faithfulness 5",
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.8
+      }
+    ],
+    "snapshot_date": "2026-06-19",
+    "subject_label": "Semi-detached in W13 0DE",
+    "value_range": [
+      712992,
+      788044
+    ],
+    "verdict": "SUSPICIOUS"
+  },
+  "spec": {
+    "asking": 550000,
+    "geo_fault": null,
+    "geo_slug": "w13-west-ealing",
+    "property_type": "S",
+    "run_mode": "headless",
+    "skip_gate": true,
+    "snapshot_fault": false,
+    "sub_postcode": "W13 0",
+    "subject_id": "34222872-AC53-4D2B-E063-4704A8C07853"
+  },
+  "stresses": "Methods that disagree; the abstain/INDETERMINATE path.",
+  "title": "W13 high-divergence subject"
+}

@@ -1,0 +1,22 @@
+{
+  "expected_behavior": "The run halts on SnapshotIntegrityError; it does not value on corrupt data.",
+  "input_id": "I9",
+  "output": {
+    "error": "checksum mismatch for <snapshot>/ub3-hayes/sold.csv: manifest 1d4cd0d7aff173dfdba0615a13ed4a92a6910c82730771d70cf2f77e5f37ebe5, actual 843716c3f31bef9a7068492eed423d84fa4657f52f9ac16ab9b3854077d1088e",
+    "error_type": "SnapshotIntegrityError",
+    "halted": true
+  },
+  "spec": {
+    "asking": 430000,
+    "geo_fault": null,
+    "geo_slug": "ub3-hayes",
+    "property_type": "S",
+    "run_mode": "headless",
+    "skip_gate": true,
+    "snapshot_fault": true,
+    "sub_postcode": "UB3 1",
+    "subject_id": "1061746E-3905-3C34-E063-4804A8C0F9E7"
+  },
+  "stresses": "A corrupted snapshot (checksum mismatch) in an integrity-verified area.",
+  "title": "Malformed snapshot row"
+}
