@@ -36,6 +36,21 @@ def run_agent(*, snapshot_root, geo_dir, geo_slug, sub_postcode, property_type,
     if not skip_gate and decision is not GateDecision.PROCEED:
         return {"gate": decision, "message": msg, "metrics": [h1]}
 
+    # An engine-preview (skip_gate) run on an area the gate would refuse must say so: the result
+    # is withheld in production, and the numbers below are shown for evaluation only.
+    disposition = None
+    if skip_gate and decision is not GateDecision.PROCEED:
+        reason = h1.reason.split(": ", 1)[-1]
+        disposition = {
+            "withheld": True,
+            "gate": decision.value,
+            "reason": reason,
+            "coverage_unproven": "QUARANTINE" in reason,
+            "note": ("Withheld in production: the geography gate refuses this area. "
+                     "Engine-preview numbers are shown for evaluation only; their confidence "
+                     "reflects method agreement, not proven area-level coverage."),
+        }
+
     snap = load_snapshot(snapshot_root)
     records = resolve_candidates(snap, geo_slug, sub_postcode, property_type)
     h2 = provenance_gate(records, snap, geo_slug)
@@ -55,4 +70,5 @@ def run_agent(*, snapshot_root, geo_dir, geo_slug, sub_postcode, property_type,
     return assemble_result(
         subject_label=subject.masked_address(), geography=geo_slug,
         snapshot_date=snap.date, reconcile_result=result, abstain=abstain,
-        explanation=explanation, metrics=[h1, h2, h3, h9, h8, h10])
+        explanation=explanation, metrics=[h1, h2, h3, h9, h8, h10],
+        production_disposition=disposition)

@@ -1,0 +1,1092 @@
+{
+  "a_plus": 94,
+  "all_a_plus": false,
+  "cells": [
+    {
+      "evidence": [
+        "OK g1.h2_present: H2 provenance metric present",
+        "OK g1.h2_success: all figures trace to snapshot rows",
+        "XX g1.checksum_verified: sl6-maidenhead is absent from the snapshot manifest: values rely on UNVERIFIED data",
+        "OK g1.estimates_integer: every estimate is an integer pound figure"
+      ],
+      "failed_checks": [
+        "g1.checksum_verified"
+      ],
+      "grade": "D",
+      "grader": "G1",
+      "input": "I1",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.directional_disclosed: directional verdict on a quarantined area is disclosed as production-withheld",
+        "OK g2.no_unqualified_high_confidence: confidence is qualified for an area with unproven coverage"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I1",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.abstain_implies_nondirectional: abstaining run carries no directional verdict",
+        "OK g3.nonabstain_has_verdict: verdict present: FAIR",
+        "OK g3.no_directional_on_low_confidence: no standing directional label at low/None confidence",
+        "OK g3.h8_single_label: verdict 'FAIR' at High confidence"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I1",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "XX g4.recall_meets_bar: 8/10 rule-valid comps retrieved in top-20"
+      ],
+      "failed_checks": [
+        "g4.recall_meets_bar"
+      ],
+      "grade": "D",
+      "grader": "G4",
+      "input": "I1",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.h10_number_guard: number_match ok; faithfulness 5",
+        "OK g5.no_unsupported_qualitative_claim: prose does not claim method support that the result lacks",
+        "OK g5.placeholder_flagged: offline placeholder is honestly labelled"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I1",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.bypass_disclosed: engine-preview discloses the gate would refuse in production"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I1",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.house_result_fields: all HouseResult fields present",
+        "OK g7.methodology_pinned: methodology_version=2.1",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I1",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.no_undisclosed_leak: result for a refusing-gate area is disclosed as withheld",
+        "OK g8.range_brackets_estimate: value range brackets a method estimate"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I1",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I1",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.withholding_communicated: a directional read on an unproven area is plainly flagged as withheld",
+        "OK g10.no_false_precision: confidence not overstated"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I1",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.h2_present: H2 provenance metric present",
+        "OK g1.h2_success: all figures trace to snapshot rows",
+        "OK g1.checksum_verified: w13-west-ealing is checksum-verified in the snapshot manifest",
+        "OK g1.estimates_integer: every estimate is an integer pound figure"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I2",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.directional_disclosed: directional verdict on a quarantined area is disclosed as production-withheld",
+        "OK g2.no_unqualified_high_confidence: confidence is qualified for an area with unproven coverage"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I2",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.abstain_implies_nondirectional: abstaining run carries no directional verdict",
+        "OK g3.nonabstain_has_verdict: verdict present: SUSPICIOUS",
+        "OK g3.no_directional_on_low_confidence: no standing directional label at low/None confidence",
+        "OK g3.h8_single_label: verdict 'SUSPICIOUS' at High confidence"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I2",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "OK g4.recall_meets_bar: 6/6 rule-valid comps retrieved in top-20"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G4",
+      "input": "I2",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.h10_number_guard: number_match ok; faithfulness 5",
+        "OK g5.no_unsupported_qualitative_claim: prose does not claim method support that the result lacks",
+        "OK g5.placeholder_flagged: offline placeholder is honestly labelled"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I2",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.bypass_disclosed: engine-preview discloses the gate would refuse in production"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I2",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.house_result_fields: all HouseResult fields present",
+        "OK g7.methodology_pinned: methodology_version=2.1",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I2",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.no_undisclosed_leak: result for a refusing-gate area is disclosed as withheld",
+        "OK g8.range_brackets_estimate: value range brackets a method estimate"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I2",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I2",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.withholding_communicated: a directional read on an unproven area is plainly flagged as withheld",
+        "OK g10.no_false_precision: confidence not overstated"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I2",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.h2_present: H2 provenance metric present",
+        "OK g1.h2_success: all figures trace to snapshot rows",
+        "OK g1.checksum_verified: ub3-hayes is checksum-verified in the snapshot manifest",
+        "OK g1.estimates_integer: every estimate is an integer pound figure"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I3",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.directional_disclosed: directional verdict on a quarantined area is disclosed as production-withheld",
+        "OK g2.no_unqualified_high_confidence: confidence is qualified for an area with unproven coverage"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I3",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.abstain_implies_nondirectional: abstaining run carries no directional verdict",
+        "OK g3.nonabstain_has_verdict: verdict present: UNDERPRICED \u2014 investigate",
+        "OK g3.no_directional_on_low_confidence: no standing directional label at low/None confidence",
+        "OK g3.h8_single_label: verdict 'UNDERPRICED \u2014 investigate' at High confidence"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I3",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "XX g4.recall_meets_bar: 11/19 rule-valid comps retrieved in top-20"
+      ],
+      "failed_checks": [
+        "g4.recall_meets_bar"
+      ],
+      "grade": "D",
+      "grader": "G4",
+      "input": "I3",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.h10_number_guard: number_match ok; faithfulness 5",
+        "OK g5.no_unsupported_qualitative_claim: prose does not claim method support that the result lacks",
+        "OK g5.placeholder_flagged: offline placeholder is honestly labelled"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I3",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.bypass_disclosed: engine-preview discloses the gate would refuse in production"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I3",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.house_result_fields: all HouseResult fields present",
+        "OK g7.methodology_pinned: methodology_version=2.1",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I3",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.no_undisclosed_leak: result for a refusing-gate area is disclosed as withheld",
+        "OK g8.range_brackets_estimate: value range brackets a method estimate"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I3",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I3",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.withholding_communicated: a directional read on an unproven area is plainly flagged as withheld",
+        "OK g10.no_false_precision: confidence not overstated"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I3",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.refusal: refused; no figures to source"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I4",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.no_claim: no directional claim made"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I4",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.na: no reconciliation stage reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I4",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "OK g4.na: retrieval stage not reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G4",
+      "input": "I4",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.na: no explanation produced"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I4",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.message_exact: message: 'Not part of the demo, calibration needed'",
+        "OK g6.decision_not_in_demo: decision: NOT_IN_DEMO",
+        "OK g6.reason_matches_cause: refusal reason cites the right cause ('QUARANTINE')"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I4",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.refusal_contract: refusal carries gate, message, metrics",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I4",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.clean: no result object to contradict itself"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I4",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I4",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.refusal_clear: refusal states a clear reason"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I4",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.refusal: refused; no figures to source"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I5",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.no_claim: no directional claim made"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I5",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.na: no reconciliation stage reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I5",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "OK g4.na: retrieval stage not reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G4",
+      "input": "I5",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.na: no explanation produced"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I5",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.message_exact: message: 'Not part of the demo, calibration needed'",
+        "OK g6.decision_not_in_demo: decision: NOT_IN_DEMO",
+        "OK g6.reason_matches_cause: refusal reason cites the right cause ('no calibration')"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I5",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.refusal_contract: refusal carries gate, message, metrics",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I5",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.clean: no result object to contradict itself"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I5",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I5",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.refusal_clear: refusal states a clear reason"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I5",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.refusal: refused; no figures to source"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I6",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.no_claim: no directional claim made"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I6",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.na: no reconciliation stage reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I6",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "OK g4.na: retrieval stage not reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G4",
+      "input": "I6",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.na: no explanation produced"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I6",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.message_exact: message: 'Not part of the demo, calibration needed'",
+        "OK g6.decision_not_in_demo: decision: NOT_IN_DEMO",
+        "OK g6.reason_matches_cause: refusal reason cites the right cause ('days old')"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I6",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.refusal_contract: refusal carries gate, message, metrics",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I6",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.clean: no result object to contradict itself"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I6",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I6",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.refusal_clear: refusal states a clear reason"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I6",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.refusal: refused; no figures to source"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I7",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.no_claim: no directional claim made"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I7",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.na: no reconciliation stage reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I7",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "OK g4.na: retrieval stage not reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G4",
+      "input": "I7",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.na: no explanation produced"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I7",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.message_exact: message: 'Not part of the demo, calibration needed'",
+        "OK g6.decision_not_in_demo: decision: NOT_IN_DEMO",
+        "OK g6.reason_matches_cause: refusal reason cites the right cause ('methodology')"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I7",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.refusal_contract: refusal carries gate, message, metrics",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I7",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.clean: no result object to contradict itself"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I7",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I7",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.refusal_clear: refusal states a clear reason"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I7",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.h2_present: H2 provenance metric present",
+        "OK g1.h2_success: all figures trace to snapshot rows",
+        "XX g1.checksum_verified: sl6-maidenhead is absent from the snapshot manifest: values rely on UNVERIFIED data",
+        "OK g1.estimates_integer: every estimate is an integer pound figure"
+      ],
+      "failed_checks": [
+        "g1.checksum_verified"
+      ],
+      "grade": "D",
+      "grader": "G1",
+      "input": "I8",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.abstained: abstained / non-directional on an unproven area \u2014 correct"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I8",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.abstain_implies_nondirectional: abstaining run carries no directional verdict",
+        "OK g3.nonabstain_has_verdict: verdict present: INDETERMINATE",
+        "OK g3.no_directional_on_low_confidence: no standing directional label at low/None confidence",
+        "OK g3.h8_single_label: verdict 'INDETERMINATE' at Low confidence"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I8",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "XX g4.recall_meets_bar: 10/16 rule-valid comps retrieved in top-20"
+      ],
+      "failed_checks": [
+        "g4.recall_meets_bar"
+      ],
+      "grade": "D",
+      "grader": "G4",
+      "input": "I8",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.h10_number_guard: number_match ok; faithfulness 5",
+        "OK g5.no_unsupported_qualitative_claim: prose does not claim method support that the result lacks",
+        "OK g5.placeholder_flagged: offline placeholder is honestly labelled"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I8",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.bypass_disclosed: engine-preview discloses the gate would refuse in production"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I8",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.house_result_fields: all HouseResult fields present",
+        "OK g7.methodology_pinned: methodology_version=2.1",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I8",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.no_undisclosed_leak: result for a refusing-gate area is disclosed as withheld",
+        "OK g8.range_brackets_estimate: value range brackets a method estimate"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I8",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I8",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.abstain_explains_gaps: abstain explains the data gaps plainly"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I8",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.halt: halted before valuing; nothing fabricated"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I9",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.no_claim: no directional claim made"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I9",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.na: no reconciliation stage reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I9",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "OK g4.na: retrieval stage not reached"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G4",
+      "input": "I9",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.na: no explanation produced"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G5",
+      "input": "I9",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.halt: halted after gate; gate not at fault"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I9",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.halt_contract: halt carries error_type and message"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I9",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.clean: no result object to contradict itself"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I9",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I9",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.halt_honest: refused to value corrupt data \u2014 honest"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I9",
+      "persona": "Honest-Communication Critic"
+    },
+    {
+      "evidence": [
+        "OK g1.h2_present: H2 provenance metric present",
+        "OK g1.h2_success: all figures trace to snapshot rows",
+        "OK g1.checksum_verified: ub3-hayes is checksum-verified in the snapshot manifest",
+        "OK g1.estimates_integer: every estimate is an integer pound figure"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G1",
+      "input": "I10",
+      "persona": "Provenance Auditor"
+    },
+    {
+      "evidence": [
+        "OK g2.abstained: abstained / non-directional on an unproven area \u2014 correct"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G2",
+      "input": "I10",
+      "persona": "Calibration Statistician"
+    },
+    {
+      "evidence": [
+        "OK g3.abstain_implies_nondirectional: abstaining run carries no directional verdict",
+        "OK g3.nonabstain_has_verdict: verdict present: NO VERDICT",
+        "OK g3.no_directional_on_low_confidence: no standing directional label at low/None confidence",
+        "OK g3.h8_single_label: verdict 'NO VERDICT' at None confidence"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G3",
+      "input": "I10",
+      "persona": "Abstention Hawk"
+    },
+    {
+      "evidence": [
+        "OK g4.recall_meets_bar: 1/1 rule-valid comps retrieved in top-20"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G4",
+      "input": "I10",
+      "persona": "Retrieval Skeptic"
+    },
+    {
+      "evidence": [
+        "OK g5.h10_number_guard: number_match ok; faithfulness 5",
+        "XX g5.no_unsupported_qualitative_claim: prose claims 'methods support the stated range' but the result has no methods/range",
+        "OK g5.placeholder_flagged: offline placeholder is honestly labelled"
+      ],
+      "failed_checks": [
+        "g5.no_unsupported_qualitative_claim"
+      ],
+      "grade": "D",
+      "grader": "G5",
+      "input": "I10",
+      "persona": "Faithfulness Inquisitor"
+    },
+    {
+      "evidence": [
+        "OK g6.bypass_disclosed: engine-preview discloses the gate would refuse in production"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G6",
+      "input": "I10",
+      "persona": "Gate Lawyer"
+    },
+    {
+      "evidence": [
+        "OK g7.house_result_fields: all HouseResult fields present",
+        "OK g7.methodology_pinned: methodology_version=2.1",
+        "OK g7.metric_record_shape: every metric record has the standard shape"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G7",
+      "input": "I10",
+      "persona": "Schema/Contract Pedant"
+    },
+    {
+      "evidence": [
+        "OK g8.no_undisclosed_leak: result for a refusing-gate area is disclosed as withheld"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G8",
+      "input": "I10",
+      "persona": "Adversary/Red-teamer"
+    },
+    {
+      "evidence": [
+        "OK g9.deterministic: byte-identical across two fresh runs"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G9",
+      "input": "I10",
+      "persona": "Reproducibility Referee"
+    },
+    {
+      "evidence": [
+        "OK g10.abstain_explains_gaps: abstain explains the data gaps plainly"
+      ],
+      "failed_checks": [],
+      "grade": "A+",
+      "grader": "G10",
+      "input": "I10",
+      "persona": "Honest-Communication Critic"
+    }
+  ],
+  "round": 1,
+  "total": 100
+}

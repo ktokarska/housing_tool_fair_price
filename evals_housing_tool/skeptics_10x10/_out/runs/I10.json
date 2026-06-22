@@ -59,6 +59,13 @@
         "threshold": 0.8
       }
     ],
+    "production_disposition": {
+      "coverage_unproven": true,
+      "gate": "NOT_IN_DEMO",
+      "note": "Withheld in production: the geography gate refuses this area. Engine-preview numbers are shown for evaluation only; their confidence reflects method agreement, not proven area-level coverage.",
+      "reason": "NOT_IN_DEMO (calibration verdict 'QUARANTINE' does not permit verdicts)",
+      "withheld": true
+    },
     "snapshot_date": "2026-06-19",
     "subject_label": "Detached in UB3 3JT",
     "value_range": null,

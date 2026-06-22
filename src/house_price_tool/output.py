@@ -20,13 +20,16 @@ class HouseResult(BaseModel):
     abstain: bool
     explanation: str
     metrics: list[MetricRecord]
+    # Present only on an engine-preview (skip_gate) run whose geography gate would refuse in
+    # production. It states, honestly, that this result is withheld in production and why.
+    production_disposition: dict | None = None
 
     def to_contract(self) -> dict:
         return self.model_dump()
 
 
 def assemble_result(*, subject_label, geography, snapshot_date, reconcile_result,
-                    abstain, explanation, metrics) -> HouseResult:
+                    abstain, explanation, metrics, production_disposition=None) -> HouseResult:
     return HouseResult(
         subject_label=subject_label, geography=geography,
         methodology_version=METHODOLOGY_VERSION, snapshot_date=snapshot_date,
@@ -35,4 +38,5 @@ def assemble_result(*, subject_label, geography, snapshot_date, reconcile_result
         value_range=reconcile_result.get("range"),
         verdict=reconcile_result["verdict"], detail=reconcile_result.get("detail", ""),
         abstain=abstain, explanation=explanation, metrics=list(metrics),
+        production_disposition=production_disposition,
     )
