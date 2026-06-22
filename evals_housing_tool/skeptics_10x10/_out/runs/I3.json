@@ -4,9 +4,9 @@
   "output": {
     "abstain": false,
     "confidence": "High",
-    "detail": "UNDERPRICED by 14.8% — investigate",
+    "detail": "UNDERPRICED by 13.8% — investigate",
     "estimates": {
-      "m1": 553673,
+      "m1": 541837,
       "m2": 508646
     },
     "explanation": "Placeholder rationale (offline sample, no LLM call).",
@@ -32,9 +32,9 @@
       {
         "gate_id": "H3",
         "metric": "recall@K",
-        "reason": "11/19 rule-valid comps retrieved in top-20",
-        "score": 0.5789,
-        "success": false,
+        "reason": "19/19 rule-valid comps retrieved in top-20",
+        "score": 1.0,
+        "success": true,
         "threshold": 0.95
       },
       {
@@ -72,8 +72,8 @@
     "snapshot_date": "2026-06-19",
     "subject_label": "Semi-detached in UB3 1AH",
     "value_range": [
-      504602,
-      557717
+      498979,
+      551504
     ],
     "verdict": "UNDERPRICED — investigate"
   },

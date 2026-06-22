@@ -3,20 +3,8 @@ from __future__ import annotations
 
 import datetime as dt
 
-from .embedding import sub_postcode_of
+from .embedding import _BANDS, area_band, sub_postcode_of
 from .models import PropertyRecord
-
-_BANDS = ["lt1000", "1000_1400", "gt1400"]
-
-
-def area_band(sqft: float | None) -> str | None:
-    if sqft is None:
-        return None
-    if sqft < 1000:
-        return "lt1000"
-    if sqft <= 1400:
-        return "1000_1400"
-    return "gt1400"
 
 
 def months_between(a_iso: str, b_iso: str) -> int:

@@ -27,10 +27,10 @@ def retrieve_comps(subject: PropertyRecord, candidates: list[PropertyRecord],
                            threshold=threshold, success=True,
                            reason="no candidate pool (0 rule-valid comps)")
         return [], rec
-    enc = FeatureEncoder().fit(pool)
+    enc = FeatureEncoder(today=today).fit(pool)
     matrix, ids = enc.transform_many(pool)
     index = CompIndex().build(matrix, ids)
-    hits = index.query(enc.transform(subject), k=k)
+    hits = index.query(enc.transform(subject, as_query=True), k=k)
     by_id = {_sold_id(c): c for c in pool}
     retrieved = [by_id[i] for i, _ in hits if i in by_id]
 
