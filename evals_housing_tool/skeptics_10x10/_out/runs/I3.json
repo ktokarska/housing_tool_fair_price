@@ -9,7 +9,7 @@
       "m1": 553673,
       "m2": 508646
     },
-    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "explanation": "Placeholder rationale (offline sample, no LLM call).",
     "geography": "ub3-hayes",
     "methodology_version": "2.1",
     "metrics": [

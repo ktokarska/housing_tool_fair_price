@@ -8,7 +8,7 @@
     "estimates": {
       "m1": 527450
     },
-    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "explanation": "Placeholder rationale (offline sample, no LLM call).",
     "geography": "sl6-maidenhead",
     "methodology_version": "2.1",
     "metrics": [

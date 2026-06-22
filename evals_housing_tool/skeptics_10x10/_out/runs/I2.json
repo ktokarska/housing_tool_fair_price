@@ -9,7 +9,7 @@
       "m1": 785250,
       "m2": 715786
     },
-    "explanation": "Placeholder rationale (offline sample, no LLM call). The available methods support the stated range.",
+    "explanation": "Placeholder rationale (offline sample, no LLM call).",
     "geography": "w13-west-ealing",
     "methodology_version": "2.1",
     "metrics": [

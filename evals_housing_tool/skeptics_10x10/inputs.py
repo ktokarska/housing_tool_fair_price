@@ -23,9 +23,10 @@ from house_price_tool.snapshot import SnapshotIntegrityError
 from .discover import snapshot_paths
 
 TODAY = "2026-06-19"  # pinned to the snapshot date; keeps every run reproducible
-# Honestly-flagged offline prose, identical to the project's own example script.
-PLACEHOLDER = ("Placeholder rationale (offline sample, no LLM call). The available methods "
-               "support the stated range.")
+# Honestly-flagged offline prose. It makes NO substantive claim, so it stays true whether the
+# run produced two methods and a range or abstained with none (the old wording asserted method
+# support a 0-method result does not have).
+PLACEHOLDER = "Placeholder rationale (offline sample, no LLM call)."
 
 
 @dataclasses.dataclass(frozen=True)

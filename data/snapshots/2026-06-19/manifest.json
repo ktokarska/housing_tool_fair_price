@@ -6,6 +6,18 @@
     "epc": "https://find-energy-certificate.service.gov.uk"
   },
   "geographies": {
+    "sl6-maidenhead": {
+      "files": {
+        "sold.csv": {
+          "sha256": "38e1f6b549d70a606da7cd938ddd0bb76003092a9b87c6ca9ada01a4ee629346",
+          "rows": 2719
+        },
+        "epc.csv": {
+          "sha256": "bf44121cb12a30e247c6b99a2a327efb0e30ae98eaa45047b6b920f967386fa4",
+          "rows": 1915
+        }
+      }
+    },
     "ub3-hayes": {
       "files": {
         "sold.csv": {
