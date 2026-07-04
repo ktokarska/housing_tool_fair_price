@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House-price estimator · demo | Kasia Tokarska de los Santos, PhD</title>
+<meta name="description" content="Interactive demo: a UK house-price estimator that reports a range and a confidence rating, abstains when its methods disagree, and shows the evaluation evidence behind every number.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   House-price estimator demo dashboard
+   Visual system carried from the KYC eval dashboard:
+   IBM Plex Sans (UI) + IBM Plex Mono (numbers), ink by default,
+   green = passing, orange = needs attention, nothing else gets colour.
+   Light / Paper / Dark themes via custom properties.
+   Static, client-rendered, sample data inline (no backend).
+   ============================================================ */
+:root,:root[data-theme="light"]{
+  --bg:#eceff2; --panel:#ffffff; --panel-2:#f6f8fa; --inset:#f1f4f6;
+  --border:#e3e8ec; --border-2:#d7dde2;
+  --ink:#161a1e; --muted:#5a636c; --faint:#899099;
+  --pass:#1f8a4c; --pass-bg:rgba(31,138,76,.10); --pass-line:rgba(31,138,76,.30);
+  --warn:#bd6510; --warn-bg:rgba(189,101,16,.10); --warn-line:rgba(189,101,16,.32);
+  --accent:#143655;
+  --shadow:0 1px 2px rgba(20,25,30,.05),0 6px 16px rgba(20,25,30,.05);
+}
+:root[data-theme="paper"]{
+  --bg:#ece5d8; --panel:#fbf8f1; --panel-2:#f4eee2; --inset:#f0e9da;
+  --border:#e1d9c8; --border-2:#d4c9b2;
+  --ink:#221d16; --muted:#5d5446; --faint:#8c8473;
+  --pass:#2a7d46; --pass-bg:rgba(42,125,70,.12); --pass-line:rgba(42,125,70,.30);
+  --warn:#ad6010; --warn-bg:rgba(173,96,16,.12); --warn-line:rgba(173,96,16,.34);
+  --accent:#143655;
+  --shadow:0 1px 2px rgba(60,50,30,.06),0 6px 16px rgba(60,50,30,.06);
+}
+:root[data-theme="dark"]{
+  --bg:#0d1014; --panel:#1c2127; --panel-2:#161a1f; --inset:#272d35;
+  --border:#363f48; --border-2:#48535e;
+  --ink:#f4f6f8; --muted:#c6cdd5; --faint:#9ca5af;
+  --pass:#52d189; --pass-bg:rgba(82,209,137,.18); --pass-line:rgba(82,209,137,.46);
+  --warn:#f29a4d; --warn-bg:rgba(242,154,77,.18); --warn-line:rgba(242,154,77,.46);
+  --accent:#92c2ea;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 24px rgba(0,0,0,.5);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums;}
+h1,h2,h3,h4{margin:0;letter-spacing:-0.01em;color:var(--ink);}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:1320px;margin:0 auto;padding:0 28px;}
+
+/* ---------- Header ---------- */
+.app-head{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in srgb, var(--panel) 88%, transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.head-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:14px 0 12px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:1.55rem;color:#c8981d;}
+.brand-block{display:flex;flex-direction:column;align-items:flex-start;gap:5px;}
+.brand-tag{margin:0;font-size:17px;font-weight:400;color:var(--muted);line-height:1.35;}
+.brand .demo-tag{
+  font-family:"IBM Plex Mono",monospace;font-size:.62rem;font-weight:600;letter-spacing:.18em;
+  color:#c8981d;background:color-mix(in srgb,#c8981d 14%,transparent);
+  border:1px solid color-mix(in srgb,#c8981d 32%,transparent);
+  padding:3px 7px;border-radius:5px;
+}
+.head-right{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--ink);text-decoration:none;font-size:.82rem;font-weight:600;
+  background:var(--inset);border:1px solid var(--border-2);border-radius:8px;
+  padding:7px 14px;
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease;
+}
+.back-link:hover{background:var(--panel-2);border-color:var(--accent);color:var(--ink);}
+.head-actions{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px;}
+.head-actions .back-link{min-width:160px;justify-content:center;}
+.contact-note{font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--faint);max-width:190px;text-align:right;line-height:1.35;}
+.theme-switch{display:inline-flex;background:var(--inset);border:1px solid var(--border);border-radius:8px;padding:2px;gap:1px;}
+.theme-switch button{
+  border:0;background:transparent;color:var(--muted);
+  font-size:.74rem;font-weight:600;padding:5px 9px;border-radius:6px;
+}
+.theme-switch button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:var(--shadow);}
+
+.head-controls{display:flex;align-items:flex-end;gap:16px;padding-bottom:14px;flex-wrap:wrap;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);}
+.field select,.field input{
+  font-family:inherit;font-size:.92rem;color:var(--ink);
+  background:var(--panel);border:1px solid var(--border-2);border-radius:9px;
+  padding:9px 12px;min-height:40px;
+}
+.field.area select{min-width:280px;}
+/* prominent area / property-type search row */
+.search-row{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:0 0 24px;}
+.search-row .field select{
+  background:color-mix(in srgb, var(--accent) 9%, var(--panel));
+  border:1.5px solid color-mix(in srgb, var(--accent) 38%, var(--border-2));
+  font-weight:600;color:var(--ink);min-height:44px;
+}
+.search-row .field select:hover{border-color:var(--accent);}
+.search-row .field label{color:var(--faint);}
+.field input::placeholder{color:var(--faint);}
+.field select:focus,.field input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.tabs{display:inline-flex;justify-content:flex-start;gap:0.5cm;}
+.tabs button{
+  border:1px solid var(--border);background:var(--inset);color:var(--muted);
+  font-size:.9rem;font-weight:600;padding:9px 14px;border-radius:8px;
+  min-width:104px;text-align:center;
+  transition:background-color .15s ease,color .15s ease,border-color .15s ease;
+}
+.tabs button:hover{color:var(--ink);}
+.tabs button[aria-selected="true"]{background:#c8981d;border-color:#c8981d;color:#241900;box-shadow:var(--shadow);}
+[data-theme="dark"] .tabs button[aria-selected="true"]{color:#241900;}
+
+/* ---------- Layout ---------- */
+main{padding:30px 0 80px;}
+.tabpanel[hidden]{display:none;}
+.section{margin:0 0 34px;}
+.section-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;}
+.section-head .s-kicker{font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;color:var(--faint);letter-spacing:.12em;}
+#val-result .s-kicker, #evals-result .s-kicker{font-size:1.18rem;color:var(--ink);letter-spacing:.06em;white-space:nowrap;}
+#val-result .section-head, #evals-result .section-head{flex-wrap:wrap;}
+.section-head h2{font-size:1.06rem;font-weight:700;}
+.section-head .s-note{font-size:.85rem;color:var(--muted);margin-left:auto;text-align:right;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:14px;}
+
+/* ---------- KPI card ---------- */
+.kpi{
+  background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  box-shadow:var(--shadow);padding:17px 18px 0;position:relative;overflow:hidden;
+}
+.kpi.fail::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--warn);}
+.k-title{font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.k-val{font-family:"IBM Plex Mono",monospace;font-size:30px;font-weight:600;color:var(--ink);margin-top:9px;line-height:1;font-variant-numeric:tabular-nums;}
+.k-val.pass{color:var(--pass);} .k-val.warn{color:var(--warn);}
+.k-sub{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--faint);margin-top:7px;}
+.k-bar{font-size:11.5px;color:var(--faint);margin-top:4px;}
+.k-def{margin-top:14px;padding:11px 0 15px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted);line-height:1.45;}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;letter-spacing:.02em;}
+.chip.pass{color:var(--pass);background:var(--pass-bg);}
+.chip.warn{color:var(--warn);background:var(--warn-bg);}
+.chip.muted{color:var(--faint);background:var(--inset);}
+
+/* ---------- Panels ---------- */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);}
+.panel-pad{padding:24px 26px;}
+
+/* ---------- Valuation tab ---------- */
+.val-intro{font-size:1.12rem;color:var(--muted);max-width:760px;margin:8px 0 22px;line-height:1.4;letter-spacing:-0.01em;}
+.val-intro .vi-1{display:block;font-weight:600;}
+.val-intro .vi-2{display:block;font-weight:400;margin-top:6px;font-size:.9rem;color:var(--faint);}
+.val-intro .vi-cmd{font:inherit;color:inherit;}
+.val-controls{display:flex;flex-direction:column;align-items:flex-start;gap:18px;margin-bottom:30px;}
+.opt-label{display:block;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);margin-bottom:11px;}
+.opt-row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;}
+.btn-primary{
+  background:var(--accent);color:#fff;border:1px solid var(--accent);
+  font-size:.92rem;font-weight:600;padding:10px 22px;border-radius:9px;min-height:40px;
+  transition:filter .15s ease,transform .15s ease;
+}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px);}
+#value-btn{background:#c8981d;border-color:#c8981d;color:#241900;}
+[data-theme="dark"] .btn-primary{color:#0f1215;}
+
+.val-empty{color:var(--muted);font-size:.95rem;padding:46px 0;text-align:center;border:1px dashed var(--border-2);border-radius:14px;}
+
+.estimate-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;}
+.hero{padding:14px 28px;}
+.hero .h-label{font-size:.95rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);}
+.hero .h-price{font-family:"IBM Plex Mono",monospace;font-size:clamp(2.6rem,5vw,3.5rem);font-weight:600;line-height:1;margin:5px 0 2px;letter-spacing:-0.01em;}
+.hero .h-range{font-family:"IBM Plex Mono",monospace;font-size:1.05rem;color:var(--muted);margin-top:6px;}
+.conf-row{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:18px;border-top:1px solid var(--border);}
+.conf-pill{font-size:.78rem;font-weight:700;letter-spacing:.04em;padding:5px 13px;border-radius:999px;text-transform:uppercase;}
+.conf-High{color:var(--pass);background:var(--pass-bg);}
+.conf-Med{color:var(--ink);background:var(--inset);}
+.conf-Low{color:var(--warn);background:var(--warn-bg);}
+.conf-reason{font-size:.86rem;color:var(--muted);}
+
+.verdict-card{padding:24px 26px;display:flex;flex-direction:column;gap:14px;}
+.verdict-tag{font-size:1.5rem;font-weight:700;letter-spacing:.01em;}
+.verdict-FAIR{color:var(--pass);}
+.verdict-OVERPRICED,.verdict-UNDERPRICED{color:var(--warn);}
+.verdict-INDETERMINATE,.verdict-QUARANTINE{color:var(--faint);}
+.verdict-where{font-family:"IBM Plex Mono",monospace;font-size:.9rem;color:var(--muted);}
+.range-track{position:relative;height:8px;border-radius:999px;background:var(--inset);margin:8px 0 4px;}
+.range-fill{position:absolute;top:0;bottom:0;border-radius:999px;background:var(--pass-line);}
+.range-mark{position:absolute;top:-4px;width:3px;height:16px;border-radius:2px;background:var(--ink);}
+.range-ends{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--faint);}
+
+.method-table{width:100%;border-collapse:collapse;}
+.method-table th{text-align:left;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);padding:0 0 10px;border-bottom:1px solid var(--border);}
+.method-table td{padding:14px 0;border-bottom:1px solid var(--border);vertical-align:top;}
+.method-table tr:last-child td{border-bottom:0;}
+.m-name{font-weight:600;}
+.m-name small{display:block;font-weight:400;color:var(--faint);font-size:.78rem;margin-top:2px;}
+.m-est{font-family:"IBM Plex Mono",monospace;font-size:1.02rem;}
+.m-est.na{color:var(--faint);}
+
+details.comps{margin-top:4px;}
+details.comps summary{cursor:pointer;font-size:.88rem;font-weight:600;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px;padding:6px 0;}
+details.comps summary::-webkit-details-marker{display:none;}
+details.comps summary .tw{transition:transform .25s ease;}
+details.comps[open] summary .tw{transform:rotate(90deg);}
+.comp-row{display:grid;grid-template-columns:1.1fr .9fr .9fr 1.2fr;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:.82rem;padding:9px 0;border-top:1px solid var(--border);}
+.comp-row .lab{color:var(--faint);}
+.comp-head{color:var(--faint);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;border-top:0;font-family:"IBM Plex Sans",sans-serif;}
+.explain{font-size:.95rem;color:var(--muted);line-height:1.6;}
+.explain strong{color:var(--ink);font-weight:600;}
+
+.state-block{padding:30px 28px;display:flex;gap:16px;align-items:flex-start;}
+.state-icon{flex:none;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:"IBM Plex Mono",monospace;}
+.state-icon.warn{color:var(--warn);background:var(--warn-bg);}
+.state-icon.muted{color:var(--faint);background:var(--inset);}
+.state-block h3{font-size:1.05rem;margin-bottom:4px;}
+.state-block p{margin:0;color:var(--muted);font-size:.92rem;}
+
+/* ---------- Evals tab ---------- */
+.cal-banner{padding:24px 28px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;border-left:5px solid var(--pass);}
+.cal-banner.warn{border-left-color:var(--warn);}
+.cal-banner.fail{border-left-color:var(--warn);}
+.cal-verdict{font-size:1.7rem;font-weight:700;line-height:1.1;}
+.cal-verdict.ok{color:var(--pass);} .cal-verdict.warn{color:var(--warn);} .cal-verdict.fail{color:var(--warn);}
+.cal-sub{font-size:.86rem;color:var(--muted);margin-top:6px;max-width:560px;}
+.cal-meta{display:flex;gap:30px;flex-wrap:wrap;}
+.cal-meta div span{display:block;}
+.cal-meta .cm-k{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);}
+.cal-meta .cm-v{font-family:"IBM Plex Mono",monospace;font-size:1.15rem;font-weight:600;margin-top:3px;}
+
+.eval-context{display:flex;align-items:center;gap:10px;margin:0 0 20px;flex-wrap:wrap;}
+.eval-context .ctx-label{font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);}
+.ctx-chip{font-family:inherit;font-size:.85rem;font-weight:600;color:var(--ink);background:var(--inset);border:1px solid var(--border-2);border-radius:8px;padding:7px 14px;cursor:pointer;transition:background-color .15s ease,border-color .15s ease;}
+.ctx-chip:hover{background:var(--panel-2);border-color:var(--accent);}
+[data-theme="dark"] .ctx-chip{color:var(--ink);}
+.chart-wrap{margin-top:14px;}
+.chart-wrap svg{width:100%;height:auto;display:block;}
+.chart-cap{font-size:.8rem;color:var(--faint);margin-top:8px;}
+
+.cm2x2{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:.8rem;margin-top:6px;}
+.cm2x2 .cm-cell{background:var(--inset);border-radius:7px;padding:11px 12px;text-align:center;}
+.cm2x2 .cm-cell .n{font-size:1.25rem;font-weight:600;display:block;}
+.cm2x2 .cm-cell.good{background:var(--pass-bg);color:var(--pass);}
+.cm2x2 .cm-axis{display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;text-align:center;font-family:"IBM Plex Sans",sans-serif;}
+
+.gate-table{width:100%;border-collapse:collapse;font-size:.86rem;}
+.gate-table th{text-align:left;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--faint);padding:0 12px 11px;border-bottom:1px solid var(--border-2);}
+.gate-table td{padding:12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.gate-table tr:last-child td{border-bottom:0;}
+.gate-table .g-id{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--muted);}
+.gate-table .g-score{font-family:"IBM Plex Mono",monospace;font-weight:600;}
+.gate-table .g-bar{font-family:"IBM Plex Mono",monospace;color:var(--faint);font-size:.8rem;}
+.g-method{font-size:.7rem;color:var(--faint);}
+.g-pass{color:var(--pass);font-weight:700;} .g-fail{color:var(--warn);font-weight:700;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.mini-list{list-style:none;margin:0;padding:0;}
+.mini-list li{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-top:1px solid var(--border);font-size:.9rem;color:var(--muted);}
+.mini-list li:first-child{border-top:0;}
+.mini-list li .dot{flex:none;margin-top:6px;width:7px;height:7px;border-radius:50%;background:var(--pass);}
+.mini-list li.warn .dot{background:var(--warn);}
+.mini-list li strong{color:var(--ink);font-weight:600;}
+.pyramid{display:flex;gap:8px;flex-direction:column;}
+.pyr-row{display:flex;align-items:center;gap:10px;font-size:.84rem;}
+.pyr-row > span{flex:none;}
+.pyr-bar{flex:1;height:26px;border-radius:6px;background:var(--pass-bg);border:1px solid var(--pass-line);display:flex;align-items:center;padding:0 10px;color:var(--pass);font-family:"IBM Plex Mono",monospace;font-size:.74rem;font-weight:600;}
+
+@media(max-width:880px){
+  .estimate-grid,.two-col,.cal-banner{grid-template-columns:1fr;}
+  .field.area select{min-width:0;width:100%;}
+  .tabs{margin-left:0;width:100%;}
+  .tabs button{flex:1;}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="app-head">
+  <div class="wrap">
+    <div class="head-top">
+      <div class="brand-block">
+        <div class="brand">Fair house price estimator <span class="demo-tag">DEMO</span></div>
+        <p class="brand-tag">What's it worth? Answered from the homes that actually sold.</p>
+        <div class="tabs" role="tablist" aria-label="Dashboard tabs" style="margin-top:12px;">
+          <button type="button" role="tab" data-tab="valuation" aria-selected="true" aria-controls="tab-valuation">Valuation</button>
+          <button type="button" role="tab" data-tab="evals" aria-selected="false" aria-controls="tab-evals">Evals</button>
+        </div>
+      </div>
+      <div class="head-actions">
+        <a class="back-link" href="/work.html">← Back to Work</a>
+        <a class="back-link" href="/contact.html">Contact</a>
+        <span class="contact-note">Contact me if you would like to add another postal code.</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" style="margin-top:34px;">
+  <section id="tab-valuation" class="tabpanel" role="tabpanel" aria-label="Valuation">
+    <h2 class="val-intro"><span class="vi-1">Choose an area and property type, then <span class="vi-cmd">get estimate</span> of fair price<br>based on empirical data-driven models of past houses sold.</span><span class="vi-2">Optional: Add asking price to know if it is fair or over/under priced.</span></h2>
+    <div class="search-row">
+      <div class="field area">
+        <label for="area-select">Area</label>
+        <select id="area-select"></select>
+      </div>
+      <div class="field">
+        <label for="ptype-select">Property type</label>
+        <select id="ptype-select">
+          <option value="detached">Detached</option>
+          <option value="semi" selected>Semi-detached</option>
+          <option value="terraced">Terraced</option>
+          <option value="flat">Flat</option>
+        </select>
+      </div>
+    </div>
+    <div class="val-controls">
+      <div class="opt-fields">
+        <span class="opt-label">Optional details, refine the estimate</span>
+        <div class="opt-row">
+          <div class="field">
+            <label for="beds-input">Bedrooms</label>
+            <input id="beds-input" type="number" min="1" max="9" placeholder="e.g. 3" style="width:120px;">
+          </div>
+          <div class="field">
+            <label for="sqft-input">Floor area sq ft</label>
+            <input id="sqft-input" type="number" min="200" max="12000" placeholder="e.g. 1,180" style="width:150px;">
+          </div>
+          <div class="field">
+            <label for="asking-input">Asking price</label>
+            <input id="asking-input" type="text" inputmode="numeric" placeholder="£ for a verdict" style="width:170px;">
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary" id="value-btn" type="button">Get estimate</button>
+    </div>
+    <div id="val-result"></div>
+  </section>
+
+  <section id="tab-evals" class="tabpanel" role="tabpanel" aria-label="Evals" hidden>
+    <div id="evals-result"></div>
+  </section>
+</main>
+
+<script>
+/* ============================================================
+   REAL DATA, derived from the pinned open-data snapshot
+   (HM Land Registry Price Paid + EPC register, 2026-06-19) via
+   scripts/build_dashboard_data.py in the housing_tool_fair_price
+   repo. Every figure traces to a real snapshot row:
+     base[type].m1      median sold price for that type (M1, comps)
+     base[type].ppsqft  EPC-matched median £/sq ft     (M2 input)
+     base[type].sqft    EPC-matched median floor area  (M2 input)
+     base[type].m3      pre-computed public-AVM proxy, median for the type
+     base[type].comps   real recent sales (price, date, sub-PC, LR uid)
+     evals              the area's real calibration result
+   Method 3 is the pre-computed open-data AVM proxy (avm_proxy.csv,
+   source PROXY:open-data-hedonic-OLS), available for ~70% of properties.
+   The 2026-06-19 calibration ran on M1+M2 only and returned QUARANTINE
+   for all three areas (SL6, W13, UB3); the live engine reconciles all
+   available methods (M1+M2+M3) as a working demonstration, but no area
+   is certified for verdicts.
+   ============================================================ */
+var DATA = {
+  "w13-west-ealing": {
+    region:"London", area:"W13 · West Ealing", label:"W13 · West Ealing", subPostcodes:"W13 0 / 8 / 9",
+    state:"quarantine", certified:false,
+    base:{
+      detached:{m1:1680000,m3:1484000,sqft:2142,ppsqft:757,beds:4,n:34,nRecent:11,epcMatches:32,m3n:32,comps:[
+        {price:695000,date:"2025-11-18",pc:"W13 8RJ",id:"50D10B83-B38B-B8D0-E063-4704A8C08D98"},
+        {price:2500000,date:"2025-11-14",pc:"W13 9NJ",id:"4777E0AE-F194-5D59-E063-4804A8C09F8E"},
+        {price:1130000,date:"2025-10-24",pc:"W13 9TS",id:"44F406B6-12F0-1095-E063-4704A8C048D4"},
+        {price:2012500,date:"2025-10-02",pc:"W13 8LY",id:"44F406B6-A91E-1095-E063-4704A8C048D4"},
+        {price:2662500,date:"2025-10-02",pc:"W13 8PW",id:"4C1B673F-66BD-D8EA-E063-4704A8C0BF7D"},
+      ]},
+      semi:{m1:1100000,m3:1161000,sqft:1598,ppsqft:735,beds:3,n:157,nRecent:61,epcMatches:150,m3n:150,comps:[
+        {price:780000,date:"2026-03-30",pc:"W13 0JA",id:"50D10B84-3D90-B8D0-E063-4704A8C08D98"},
+        {price:1212000,date:"2026-03-20",pc:"W13 9XG",id:"50D10B84-3BD5-B8D0-E063-4704A8C08D98"},
+        {price:790000,date:"2026-02-19",pc:"W13 9EY",id:"4E75C29D-7307-8922-E063-4804A8C094D0"},
+        {price:1677200,date:"2026-02-05",pc:"W13 8LQ",id:"4E75C29D-739D-8922-E063-4804A8C094D0"},
+        {price:813800,date:"2026-01-09",pc:"W13 9LB",id:"49E87C32-2FA1-591C-E063-4704A8C00C31"},
+      ]},
+      terraced:{m1:840000,m3:898000,sqft:1184,ppsqft:736,beds:3,n:326,nRecent:127,epcMatches:310,m3n:310,comps:[
+        {price:965000,date:"2026-04-24",pc:"W13 9SH",id:"50D10B84-388E-B8D0-E063-4704A8C08D98"},
+        {price:790000,date:"2026-04-20",pc:"W13 9XW",id:"50D10B84-3905-B8D0-E063-4704A8C08D98"},
+        {price:691000,date:"2026-04-14",pc:"W13 0TF",id:"50D10B84-3935-B8D0-E063-4704A8C08D98"},
+        {price:590000,date:"2026-04-02",pc:"W13 0NT",id:"50D10B84-3B94-B8D0-E063-4704A8C08D98"},
+        {price:920000,date:"2026-03-31",pc:"W13 0LE",id:"50D10B84-38FC-B8D0-E063-4704A8C08D98"},
+      ]},
+      flat:{m1:440000,m3:420000,sqft:657,ppsqft:676,beds:2,n:378,nRecent:120,epcMatches:158,m3n:158,comps:[
+        {price:595000,date:"2026-04-17",pc:"W13 0HF",id:"50D10B83-B47E-B8D0-E063-4704A8C08D98"},
+        {price:445000,date:"2026-04-15",pc:"W13 0JY",id:"50D10B84-3B30-B8D0-E063-4704A8C08D98"},
+        {price:448000,date:"2026-04-10",pc:"W13 0JY",id:"50D10B84-38A6-B8D0-E063-4704A8C08D98"},
+        {price:350000,date:"2026-04-08",pc:"W13 0FQ",id:"50D10B83-B414-B8D0-E063-4704A8C08D98"},
+        {price:345000,date:"2026-04-02",pc:"W13 0FR",id:"50D10B83-B415-B8D0-E063-4704A8C08D98"},
+      ]},
+    },
+    evals:{
+      verdict:"QUARANTINE", calDate:"2026-06-19", ageDays:0, version:"2.1",
+      sample:895, scored:671, refused:224, N:671,
+      mae:10.9, bias:1.7, q80:25.9, hitRate:33.3, hitCI:[29.1,37.9], highTier:28.9,
+      abstain:{precision:0.64,recall:0.42}, matchRate:83, m3Avail:73
+    }
+  },
+  "ub3-hayes": {
+    region:"London", area:"UB3 · Hayes", label:"UB3 · Hayes (Hillingdon)", subPostcodes:"UB3 1–5",
+    state:"quarantine", certified:false,
+    base:{
+      detached:{m1:540000,m3:726000,sqft:1087,ppsqft:512,beds:4,n:20,nRecent:5,epcMatches:18,m3n:18,comps:[
+        {price:520000,date:"2026-04-15",pc:"UB3 2PU",id:"50D10B84-38FF-B8D0-E063-4704A8C08D98"},
+        {price:625000,date:"2026-01-30",pc:"UB3 5DP",id:"4E75C29D-788E-8922-E063-4804A8C094D0"},
+        {price:760000,date:"2025-09-26",pc:"UB3 4NG",id:"402A3A66-2150-A7DF-E063-4804A8C0B80D"},
+        {price:520000,date:"2025-08-22",pc:"UB3 2PW",id:"4C1B673E-CE0F-D8EA-E063-4704A8C0BF7D"},
+        {price:540000,date:"2025-07-21",pc:"UB3 2QJ",id:"50D10B84-C780-B8D0-E063-4704A8C08D98"},
+      ]},
+      semi:{m1:535000,m3:606000,sqft:936,ppsqft:549,beds:3,n:273,nRecent:104,epcMatches:268,m3n:268,comps:[
+        {price:430000,date:"2026-04-17",pc:"UB3 2RL",id:"50D10B84-C8FE-B8D0-E063-4704A8C08D98"},
+        {price:605000,date:"2026-04-17",pc:"UB3 3AB",id:"50D10B84-3888-B8D0-E063-4704A8C08D98"},
+        {price:390000,date:"2026-04-08",pc:"UB3 5LP",id:"50D10B84-C897-B8D0-E063-4704A8C08D98"},
+        {price:600000,date:"2026-04-02",pc:"UB3 2QG",id:"50D10B84-A466-B8D0-E063-4704A8C08D98"},
+        {price:500000,date:"2026-03-30",pc:"UB3 2PN",id:"50D10B84-393D-B8D0-E063-4704A8C08D98"},
+      ]},
+      terraced:{m1:468000,m3:548000,sqft:861,ppsqft:537,beds:3,n:240,nRecent:88,epcMatches:232,m3n:232,comps:[
+        {price:420000,date:"2026-04-09",pc:"UB3 4JU",id:"50D10B84-37E1-B8D0-E063-4704A8C08D98"},
+        {price:327500,date:"2026-04-02",pc:"UB3 1QY",id:"50D10B84-3B8F-B8D0-E063-4704A8C08D98"},
+        {price:440000,date:"2026-03-30",pc:"UB3 4AG",id:"50D10B84-38CD-B8D0-E063-4704A8C08D98"},
+        {price:370000,date:"2026-03-27",pc:"UB3 4HA",id:"50D10B84-3B39-B8D0-E063-4704A8C08D98"},
+        {price:404000,date:"2026-03-16",pc:"UB3 1NJ",id:"50D10B84-A423-B8D0-E063-4704A8C08D98"},
+      ]},
+      flat:{m1:291000,m3:289000,sqft:581,ppsqft:439,beds:2,n:393,nRecent:93,epcMatches:123,m3n:123,comps:[
+        {price:330000,date:"2026-04-10",pc:"UB3 5LH",id:"50D10B84-C90E-B8D0-E063-4704A8C08D98"},
+        {price:280000,date:"2026-04-07",pc:"UB3 5NA",id:"50D10B84-3C4C-B8D0-E063-4704A8C08D98"},
+        {price:320000,date:"2026-04-07",pc:"UB3 2AR",id:"50D10B83-B3A0-B8D0-E063-4704A8C08D98"},
+        {price:126000,date:"2026-03-30",pc:"UB3 4FQ",id:"50D10B83-B315-B8D0-E063-4704A8C08D98"},
+        {price:179000,date:"2026-03-19",pc:"UB3 1RR",id:"50D10B84-A5CD-B8D0-E063-4704A8C08D98"},
+      ]},
+    },
+    evals:{
+      verdict:"QUARANTINE", calDate:"2026-06-19", ageDays:0, version:"2.1",
+      sample:926, scored:764, refused:162, N:764,
+      mae:10.0, bias:4.9, q80:25.0, hitRate:40.6, hitCI:[35.9,45.6], highTier:39.9,
+      abstain:{precision:0.57,recall:0.58}, matchRate:93, m3Avail:69
+    }
+  },
+  "sl6-maidenhead": {
+    region:"Berkshire", area:"SL6 · Maidenhead", label:"SL6 · Maidenhead", subPostcodes:"SL6 0–9",
+    state:"quarantine", certified:false,
+    base:{
+      detached:{m1:810000,m3:874000,sqft:1485,ppsqft:560,beds:4,n:710,nRecent:254,epcMatches:666,m3n:666,comps:[
+        {price:490000,date:"2026-04-17",pc:"SL6 2EA",id:"50D10B83-BF5F-B8D0-E063-4704A8C08D98"},
+        {price:575000,date:"2026-04-16",pc:"SL6 0EY",id:"50D10B83-C352-B8D0-E063-4704A8C08D98"},
+        {price:770000,date:"2026-04-14",pc:"SL6 3UR",id:"50D10B83-BCBD-B8D0-E063-4704A8C08D98"},
+        {price:711450,date:"2026-04-10",pc:"SL6 8QB",id:"50D10B83-BC52-B8D0-E063-4704A8C08D98"},
+        {price:760000,date:"2026-04-02",pc:"SL6 2NX",id:"50D10B83-BD4D-B8D0-E063-4704A8C08D98"},
+      ]},
+      semi:{m1:540000,m3:549000,sqft:1033,ppsqft:514,beds:3,n:626,nRecent:218,epcMatches:598,m3n:598,comps:[
+        {price:636000,date:"2026-04-10",pc:"SL6 0JY",id:"50D10B83-C111-B8D0-E063-4704A8C08D98"},
+        {price:500000,date:"2026-04-10",pc:"SL6 6RX",id:"50D10B83-BCE1-B8D0-E063-4704A8C08D98"},
+        {price:500000,date:"2026-04-10",pc:"SL6 2SQ",id:"50D10B83-BC4C-B8D0-E063-4704A8C08D98"},
+        {price:610000,date:"2026-04-08",pc:"SL6 7QE",id:"50D10B83-BDB6-B8D0-E063-4704A8C08D98"},
+        {price:526000,date:"2026-03-31",pc:"SL6 7RY",id:"50D10B83-BF4B-B8D0-E063-4704A8C08D98"},
+      ]},
+      terraced:{m1:464000,m3:463000,sqft:915,ppsqft:494,beds:3,n:483,nRecent:170,epcMatches:439,m3n:439,comps:[
+        {price:625000,date:"2026-04-16",pc:"SL6 8RH",id:"50D10B83-BE4D-B8D0-E063-4704A8C08D98"},
+        {price:825000,date:"2026-04-15",pc:"SL6 6DQ",id:"50D10B83-BEC4-B8D0-E063-4704A8C08D98"},
+        {price:490000,date:"2026-04-15",pc:"SL6 2FL",id:"50D10B83-BE87-B8D0-E063-4704A8C08D98"},
+        {price:1175000,date:"2026-03-31",pc:"SL6 2AY",id:"50D10B83-BC7C-B8D0-E063-4704A8C08D98"},
+        {price:435000,date:"2026-03-27",pc:"SL6 4BA",id:"50D10B83-BD35-B8D0-E063-4704A8C08D98"},
+      ]},
+      flat:{m1:285000,m3:271000,sqft:678,ppsqft:409,beds:2,n:786,nRecent:233,epcMatches:200,m3n:200,comps:[
+        {price:410000,date:"2026-04-10",pc:"SL6 1DL",id:"50D10B83-BEBB-B8D0-E063-4704A8C08D98"},
+        {price:358000,date:"2026-04-10",pc:"SL6 1AG",id:"50D10B83-BEB9-B8D0-E063-4704A8C08D98"},
+        {price:220000,date:"2026-04-09",pc:"SL6 7LS",id:"50D10B84-A843-B8D0-E063-4704A8C08D98"},
+        {price:200000,date:"2026-04-08",pc:"SL6 8DH",id:"50D10B83-BC8B-B8D0-E063-4704A8C08D98"},
+        {price:280000,date:"2026-04-02",pc:"SL6 8QH",id:"50D10B83-BF72-B8D0-E063-4704A8C08D98"},
+      ]},
+    },
+    evals:{
+      verdict:"QUARANTINE", calDate:"2026-06-19", ageDays:0, version:"2.1",
+      sample:2605, scored:2069, refused:536, N:2069,
+      mae:10.3, bias:0.0, q80:23.0, hitRate:33.2, hitCI:[30.7,35.8], highTier:28.8,
+      abstain:{precision:0.59,recall:0.42}, matchRate:88, m3Avail:73
+    }
+  },
+};
+var AREA_ORDER = ["w13-west-ealing", "ub3-hayes", "sl6-maidenhead"];
+
+var GBP = function(n){ return "£" + Math.round(n).toLocaleString("en-GB"); };
+var GBP0 = function(n){ return "£" + (Math.round(n/1000)*1000).toLocaleString("en-GB"); };
+var PCT = function(n,d){ return (n>0?"+":"") + n.toFixed(d===undefined?1:d) + "%"; };
+
+/* ---------- State ---------- */
+var state = { area:"w13-west-ealing", ptype:"semi", computed:null };
+
+/* ---------- Build area dropdown ---------- */
+(function buildAreas(){
+  var sel = document.getElementById("area-select");
+  var byRegion = {};
+  AREA_ORDER.forEach(function(k){
+    var a = DATA[k];
+    (byRegion[a.region] = byRegion[a.region] || []).push(k);
+  });
+  Object.keys(byRegion).forEach(function(region){
+    var og = document.createElement("optgroup");
+    og.label = region;
+    byRegion[region].forEach(function(k){
+      var o = document.createElement("option");
+      o.value = k; o.textContent = DATA[k].label;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  sel.value = state.area;
+})();
+
+/* ---------- Valuation compute ----------
+   Reconciles the available methods: M1 (comps), M2 (EPC £/sq ft), and
+   M3 (pre-computed public-AVM proxy). M3 is unavailable where the proxy
+   has no row for the type. With fewer than two available methods the
+   tool abstains by design. The
+   engine still runs on quarantined areas (a working demonstration); the
+   result carries certified:false so the page withholds a verdict label. */
+function computeValuation(){
+  var d = DATA[state.area];
+  if(d.state === "uncalibrated" || !d.base){ return { state:"uncalibrated" }; }
+  var t = state.ptype;
+  var b = d.base[t];
+  if(!b){ return { state:"no-type", ptype:t }; }
+  var bedsIn = parseInt(document.getElementById("beds-input").value,10);
+  var sqftIn = parseFloat(document.getElementById("sqft-input").value);
+  var askingRaw = document.getElementById("asking-input").value.replace(/[^0-9.]/g,"");
+  var asking = askingRaw ? parseFloat(askingRaw) : null;
+
+  var beds = (!isNaN(bedsIn) && bedsIn>0) ? bedsIn : b.beds;
+  var sqft = (!isNaN(sqftIn) && sqftIn>0) ? sqftIn : b.sqft;
+  var bedAdj = 1 + 0.03*(beds - b.beds);
+
+  var m1 = b.m1 ? b.m1 * bedAdj : null;
+  var m2Available = !!(b.ppsqft && sqft);
+  var m2 = m2Available ? b.ppsqft * sqft : null;
+  var m3Available = !!b.m3;            // pre-computed public-AVM proxy (open-data hedonic)
+  var m3 = m3Available ? b.m3 * bedAdj : null;
+
+  var methods = [];
+  if(m1!=null) methods.push(m1);
+  if(m2!=null) methods.push(m2);
+  if(m3!=null) methods.push(m3);
+
+  if(methods.length < 2){
+    // fewer than two methods available -> the tool refuses to publish a point estimate
+    return { state:"abstain-method", beds:beds, sqft:sqft, ptype:t,
+             m1:m1!=null?Math.round(m1):null, m2:m2!=null?Math.round(m2):null,
+             m3:m3!=null?Math.round(m3):null,
+             m2Available:m2Available, m3Available:m3Available, certified:d.state==="calibrated" };
+  }
+
+  methods.sort(function(x,y){return x-y;});
+  var n=methods.length;
+  var mid = n%2 ? methods[(n-1)/2] : (methods[n/2-1]+methods[n/2])/2;  // median of available
+  var estimate = Math.round(mid/1000)*1000;
+  var spread = (methods[n-1]-methods[0]) / mid;
+
+  var tier, hw, indeterminate=false;
+  if(spread >= 0.20){ tier="Low"; hw=0.15; indeterminate=true; }
+  else if(spread >= 0.12){ tier="Low"; hw=0.14; }
+  else if(spread >= 0.06){ tier="Med"; hw=0.09; }
+  else { tier="High"; hw=0.055; }
+
+  var low = Math.round(estimate*(1-hw)/1000)*1000;
+  var high = Math.round(estimate*(1+hw)/1000)*1000;
+
+  var verdict=null, where=null, askPos=null;
+  if(asking!=null){
+    if(indeterminate){ verdict="INDETERMINATE"; }
+    else if(asking < low){ verdict="UNDERPRICED"; }
+    else if(asking > high){ verdict="OVERPRICED"; }
+    else { verdict="FAIR"; }
+    askPos = Math.max(0,Math.min(1,(asking-low)/(high-low)));
+    var third = askPos<0.34?"lower third":askPos<0.67?"middle third":"upper third";
+    where = (asking<low||asking>high) ? (asking<low?"below the range":"above the range") : ("in the "+third+" of the range");
+  }
+
+  return {
+    state:"calibrated", certified:d.state==="calibrated", areaState:d.state,
+    estimate:estimate, low:low, high:high, tier:tier, spread:spread,
+    indeterminate:indeterminate, beds:beds, sqft:sqft,
+    m1:Math.round(m1), m2:m2!=null?Math.round(m2):null, m3:m3!=null?Math.round(m3):null,
+    m2Available:m2Available, m3Available:m3Available, asking:asking, verdict:verdict, where:where, askPos:askPos
+  };
+}
+
+/* ---------- Render valuation ---------- */
+function renderValuation(){
+  var d = DATA[state.area];
+  var host = document.getElementById("val-result");
+  var c = state.computed;
+  if(!c){ host.innerHTML = ''; return; }
+  if(c.state === "uncalibrated"){
+    host.innerHTML = stateBlock("muted","·","Not part of the demo: calibration needed",
+      "A pinned open-data snapshot exists for this area, but it has not been calibrated, so the tool will not produce a valuation or a verdict for it. The geography gate refuses uncalibrated areas by design rather than show a number it cannot stand behind.");
+    return;
+  }
+  if(c.state === "no-type"){
+    host.innerHTML = stateBlock("muted","·","This property type isn't covered here",
+      "The snapshot for this area does not hold enough sales of this property type to value it. The tool reports the gap honestly instead of stretching a thin sample.");
+    return;
+  }
+  if(c.state === "abstain-method"){
+    host.innerHTML = (d.certified ? '' : certCaveat())
+      + stateBlock("warn","!","Estimate withheld: only one method available",
+      "Fewer than two of the three methods (M1 comparable sales, M2 EPC £/sq ft, M3 public-AVM proxy) have data for this type, so there is nothing to cross-check against. The tool abstains rather than publish a single-method point estimate."
+      + (c.m1!=null?" Method 1 (comparable sales) alone suggests about "+GBP0(c.m1)+", shown for context only.":""));
+    if(!d.certified) wireGotoEvals();
+    return;
+  }
+
+  var conf = c.tier;
+  var reasonPct = (c.spread*100).toFixed(1);
+  var reason = c.indeterminate
+    ? "methods disagree by "+reasonPct+"% (> 20%) → estimate withheld"
+    : "methods agree within "+reasonPct+"% → "+conf+" confidence";
+
+  var caveat = c.certified ? '' : certCaveat();
+
+  // verdict / range visual
+  var verdictHtml = "";
+  if(!c.certified){
+    // Quarantined area: show the range position but withhold the directional label (gate-first).
+    if(c.asking==null){
+      verdictHtml =
+        '<div class="panel verdict-card">'
+        + '<div><div class="h-label">Verdict</div><div class="verdict-tag verdict-QUARANTINE" style="font-size:1.05rem;">Withheld — area not certified</div></div>'
+        + '<p class="explain">This area is <strong>QUARANTINE</strong>, so no FAIR / OVERPRICED / UNDERPRICED label is issued even with an asking price. The estimate and range are a working demonstration only.</p>'
+        + rangeTrack(c) + '</div>';
+    } else {
+      verdictHtml =
+        '<div class="panel verdict-card">'
+        + '<div><div class="h-label">Asking ' + GBP(c.asking) + ' vs demonstration range</div>'
+        + '<div class="verdict-tag verdict-QUARANTINE" style="font-size:1.05rem;">Directional verdict withheld</div>'
+        + '<div class="verdict-where">Asking sits '+c.where+'. No certified label is issued: this area is QUARANTINE.</div></div>'
+        + rangeTrack(c) + '</div>';
+    }
+  } else if(c.indeterminate){
+    verdictHtml =
+      '<div class="panel verdict-card">'
+      + '<div><div class="h-label">Verdict</div><div class="verdict-tag verdict-INDETERMINATE">INDETERMINATE</div></div>'
+      + '<p class="explain">The available methods disagree by more than 20%, so the tool refuses a directional call and publishes a wide range only. A confident verdict here would be guessing.</p>'
+      + '</div>';
+  } else if(c.asking==null){
+    verdictHtml =
+      '<div class="panel verdict-card">'
+      + '<div><div class="h-label">Verdict</div><div class="verdict-tag verdict-INDETERMINATE" style="font-size:1.05rem;">No asking price entered</div></div>'
+      + '<p class="explain">Add an asking price above to get exactly one label from the closed set (<strong>FAIR · OVERPRICED · UNDERPRICED</strong>), and where it sits in the range.</p>'
+      + rangeTrack(c) + '</div>';
+  } else {
+    verdictHtml =
+      '<div class="panel verdict-card">'
+      + '<div><div class="h-label">Verdict vs asking ' + GBP(c.asking) + '</div>'
+      + '<div class="verdict-tag verdict-'+c.verdict+'">'+c.verdict+'</div>'
+      + '<div class="verdict-where">Asking sits '+c.where+'.</div></div>'
+      + rangeTrack(c) + '</div>';
+  }
+
+  var heroLabel = c.certified ? "Fair price estimate" : "Estimate (demonstration, not certified)";
+  var estimateBlock = c.indeterminate
+    ? '<div class="panel hero">'
+      + '<div class="h-label">Wide range only (estimate withheld)</div>'
+      + '<div class="h-price mono" style="font-size:2rem;">'+GBP0(c.low)+' – '+GBP0(c.high)+'</div>'
+      + '<div class="conf-row"><span class="conf-pill conf-Low">Low confidence</span>'
+      + '<span class="conf-reason">'+reason+'</span></div>'
+      + '</div>'
+    : '<div class="panel hero">'
+        + '<div class="h-label">'+heroLabel+'</div>'
+        + '<div class="h-price mono">'+GBP0(c.estimate)+'</div>'
+        + '<div class="h-range">Range '+GBP0(c.low)+' – '+GBP0(c.high)+'</div>'
+        + '<div class="conf-row"><span class="conf-pill conf-'+conf+'">'+conf+' confidence</span>'
+        + '<span class="conf-reason">'+reason+'</span></div>'
+      + '</div>';
+
+  // method breakdown
+  var rows = [
+    methodRow("M1", "Comparable sales (median, "+state.area.split("-")[0].toUpperCase()+")", c.m1, true, null),
+    methodRow("M2", "EPC £/sq ft × "+c.sqft.toLocaleString("en-GB")+" sq ft", c.m2, c.m2Available, c.m2Available?null:"no EPC floor-area match"),
+    methodRow("M3", "Public AVM cross-check", c.m3, c.m3Available, c.m3Available?"open-data AVM proxy":"no AVM proxy for this type")
+  ].join("");
+
+  var comps = d.base[state.ptype].comps;
+  var compsHtml = (comps && comps.length)
+    ? '<details class="comps"><summary><svg class="tw" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Recent comparable sales ('+comps.length+')</summary>'
+      + '<div class="comp-row comp-head"><span>Sold price</span><span>Date</span><span>Sub-postcode</span><span>Land Registry id</span></div>'
+      + comps.map(function(cp){
+          return '<div class="comp-row"><span>'+GBP(cp.price)+'</span><span class="lab">'+cp.date+'</span><span class="lab">'+cp.pc+'</span><span class="lab" style="word-break:break-all;">'+cp.id+'</span></div>';
+        }).join("")
+      + '<p class="chart-cap" style="margin-top:10px;">Most recent recorded sales of this type in '+d.area+'. Every row traces to a real HM Land Registry Price Paid record.</p>'
+      + '</details>'
+    : '';
+
+  var mlist = ['comparable sales (M1, '+GBP0(c.m1)+')'];
+  if(c.m2Available) mlist.push('floor-area pricing (M2, '+GBP0(c.m2)+')');
+  if(c.m3Available) mlist.push('an open-data public-AVM proxy (M3, '+GBP0(c.m3)+')');
+  var mtext = mlist.length>2 ? (mlist.slice(0,-1).join(', ')+', and '+mlist[mlist.length-1]) : mlist.join(' and ');
+  var explanation =
+    '<p class="explain">For a '+state.ptype.replace("semi","semi-detached")+' in <strong>'+d.area+'</strong> at about <strong>'+c.sqft.toLocaleString("en-GB")+' sq ft</strong>, the tool reconciled '+mlist.length+' independent methods: '+mtext+'. They '
+    + (c.indeterminate
+        ? 'disagree by '+(c.spread*100).toFixed(1)+'% (beyond the 20% limit), so the tool withholds a single number and publishes a wide range only. '
+        : 'agree within '+(c.spread*100).toFixed(1)+'%, giving a reconciled estimate of <strong>'+GBP0(c.estimate)+'</strong> with a '+conf.toLowerCase()+'-confidence range of '+GBP0(c.low)+'–'+GBP0(c.high)+'. ')
+    + (c.certified ? '' : 'Because this area is QUARANTINE, the number is shown to demonstrate the engine, not as a certified valuation.')
+    + '</p>';
+
+  host.innerHTML =
+    '<div class="estimate-grid">'+estimateBlock+verdictHtml+'</div>'
+    + caveat
+    + '<div class="section" style="margin-top:34px;"><div class="section-head"><span class="s-kicker">EXPLANATION</span></div>'
+    + '<div class="panel panel-pad">'+explanation+'</div></div>'
+    + '<div class="section" style="margin-top:22px;"><div class="section-head"><span class="s-kicker">METHOD BREAKDOWN</span></div>'
+    + '<div class="panel panel-pad"><table class="method-table"><thead><tr><th>Method</th><th>Estimate</th><th>Status</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    + compsHtml + '</div></div>';
+  if(!c.certified) wireGotoEvals();
+}
+
+/* Persistent honesty strip for areas that run the engine but are not certified. */
+function certCaveat(){
+  return '<div class="panel state-block" style="border-left:5px solid var(--warn);margin-top:18px;margin-bottom:18px;">'
+    + '<div class="state-icon warn">!</div>'
+    + '<div><h3>Demonstration estimate — area not certified</h3>'
+    + '<p>This area\'s latest calibration verdict is <strong>QUARANTINE</strong>, so the tool is not certified to issue a price verdict here. These figures run the real valuation engine on open data as a working demonstration. See the <a href="#" data-goto-evals style="color:var(--accent);font-weight:600;">Evals tab</a> for the gates it missed.</p></div></div>';
+}
+
+function methodRow(id,desc,val,avail,flag){
+  var chip = avail
+    ? (flag ? '<span class="chip muted">'+flag+'</span>' : '<span class="chip pass">available</span>')
+    : '<span class="chip warn">'+(flag||"unavailable")+'</span>';
+  return '<tr><td class="m-name">'+id+' <small>'+desc+'</small></td>'
+    + '<td class="m-est'+(avail?'':' na')+'">'+(avail&&val!=null?GBP0(val):'n/a')+'</td>'
+    + '<td>'+chip+'</td></tr>';
+}
+function rangeTrack(c){
+  if(c.asking==null){
+    return '<div><div class="range-track"><div class="range-fill" style="left:0;right:0;"></div></div>'
+      + '<div class="range-ends"><span>'+GBP0(c.low)+'</span><span>'+GBP0(c.high)+'</span></div></div>';
+  }
+  var pos = Math.max(0,Math.min(1,(c.asking-c.low)/(c.high-c.low)))*100;
+  return '<div><div class="range-track"><div class="range-fill" style="left:0;right:0;"></div>'
+    + '<div class="range-mark" style="left:calc('+pos.toFixed(1)+'% - 1.5px);"></div></div>'
+    + '<div class="range-ends"><span>'+GBP0(c.low)+'</span><span>'+GBP0(c.high)+'</span></div></div>';
+}
+function stateBlock(kind,icon,title,body){
+  return '<div class="panel state-block"><div class="state-icon '+kind+'">'+icon+'</div>'
+    + '<div><h3>'+title+'</h3><p>'+body+'</p></div></div>';
+}
+function wireGotoEvals(){
+  var a = document.querySelector('[data-goto-evals]');
+  if(a) a.addEventListener("click", function(e){ e.preventDefault(); switchTab("evals"); });
+}
+
+/* ---------- Render evals ---------- */
+function renderEvals(){
+  var d = DATA[state.area];
+  var host = document.getElementById("evals-result");
+  if(!d.evals){
+    host.innerHTML = stateBlock("muted","·","No calibration for this area",
+      "A pinned open-data snapshot exists for this area, but it has not been through a calibration run, so there is no eval payload to show. The dashboard reports the absence honestly rather than rendering zeros.");
+    return;
+  }
+  var e = d.evals;
+  var v = e.verdict;
+  var vClass = v==="PASS" ? "ok" : v==="QUARANTINE" ? "fail" : "warn";
+  var bClass = v==="PASS" ? "" : v==="QUARANTINE" ? "fail" : "warn";
+  var vSub = ({
+    "PASS":"This area earned the right to show verdicts: all gates pass at the published bars.",
+    "PASS-WITH-WIDER-RANGES":"This area shows verdicts, but residuals drive a wider published range than the headline bar, so the tool widens rather than overclaims.",
+    "PASS-WITH-CORRECTION":"This area shows verdicts after a fitted bias correction was applied and re-validated.",
+    "QUARANTINE":"Calibration did not pass the gates, so the tool is not certified to issue verdicts here. The valuation engine still runs as a demonstration; the gates below show exactly what it missed, with no thresholds moved after seeing the residuals."
+  })[v] || "";
+  var expired = e.ageDays > 90;
+
+  var banner =
+    '<div class="panel cal-banner '+bClass+'">'
+    + '<div><div class="h-label" style="font-size:.72rem;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;">Calibration verdict</div>'
+    + '<div class="cal-verdict '+vClass+'">'+v+'</div>'
+    + '<div class="cal-sub">'+vSub+'</div></div>'
+    + '<div class="cal-meta">'
+    + calMeta("Calibrated", e.calDate)
+    + calMeta("Age vs 90-day limit", e.ageDays+" days"+(expired?" · EXPIRED":" · fresh"), expired)
+    + calMeta("Methodology", "v"+e.version)
+    + calMeta("Sample scored", "N = "+e.N.toLocaleString("en-GB"))
+    + '</div></div>';
+
+  // B. Accuracy
+  var maeFail = e.mae >= 5;
+  var biasFail = Math.abs(e.bias) > 2;
+  var hitFail = e.hitCI[0] < 70;
+  var accCards =
+    kpi("MAE", e.mae.toFixed(1)+"%", maeFail, "bar: PASS < 5% · wider < 10% · quarantine > 10%", "Average size of the valuation error against real sold prices.")
+    + kpi("Bias", PCT(e.bias), biasFail, "bar: within ±2%", "Whether the tool leans systematically high or low.")
+    + kpi("Directional hit rate", e.hitRate.toFixed(1)+"%", hitFail, "bar: ≥ 70% · 95% Wilson ["+e.hitCI[0].toFixed(1)+"%, "+e.hitCI[1].toFixed(1)+"%]", "How often the verdict direction matched the true sold price.")
+    + kpi("q80 / H", e.q80.toFixed(1)+"%", false, "drives range half-width", "The error level that sets how wide the published range is.");
+
+  var accSection = section("ACCURACY & CALIBRATION","Is the number accurate?",
+    '<div class="grid">'+accCards+'</div>' + residualSummary(e));
+
+  // C. Retrieval & abstain
+  var apFail = e.abstain.precision < 0.80;
+  var arFail = e.abstain.recall < 0.80;
+  var scoredPct = Math.round(100*e.scored/e.sample);
+  var refusedPct = Math.round(100*e.refused/e.sample);
+  var retrCards =
+    kpiPending("recall@20", "bar: ≥ 0.95", "Whether retrieval finds the valid comparable sales it should. The vector-store retrieval eval has not been run on this snapshot.")
+    + kpi("Abstain precision", e.abstain.precision.toFixed(2), apFail, "bar: ≥ 0.80", "When the tool refuses, how often refusing was the right call.")
+    + kpi("Abstain recall", e.abstain.recall.toFixed(2), arFail, "bar: ≥ 0.80", "Of the cases it should have refused, how many it caught.");
+  var retrSection = section("RETRIEVAL & ABSTAIN","Does it retrieve and abstain well?",
+    '<div class="two-col"><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">'+retrCards+'</div>'
+    + '<div class="panel panel-pad"><div class="k-title" style="margin-bottom:4px;">Method coverage across the '+e.sample.toLocaleString("en-GB")+'-property sample</div>'
+    + availBar("Scored (≥ 1 method)", scoredPct)
+    + availBar("EPC £/sq ft match rate", e.matchRate)
+    + availBar("M3 public-AVM proxy", e.m3Avail)
+    + '<p class="chart-cap" style="margin-top:8px;">'+e.refused.toLocaleString("en-GB")+' of '+e.sample.toLocaleString("en-GB")+' properties ('+refusedPct+'%) were refused with no method available. The M3 open-data AVM proxy was added after this 2026-06-19 calibration, so the verdict above reflects the M1+M2 run; re-calibration with M3 is pending.</p>'
+    + '<div class="k-title" style="margin:16px 0 4px;">Abstain confusion (2×2)</div>'
+    + '<p class="chart-cap">Per-cell counts were not exported in this calibration run. The precision and recall cards are the recorded summary.</p>'
+    + '</div></div>');
+
+  // D. Faithfulness — LLM judge surface, not exercised in this calibration run
+  var faithCards =
+    kpiPending("Faithfulness mean", "bar: ≥ 4/5, none < 3", "Whether the written rationale is supported by the numbers (LLM-judged). The judge pass was not run on this snapshot.")
+    + kpiPending("Number-match guard", "bar: 100%", "Every number in the prose exactly matches the computed output.")
+    + kpiPending("Judge–human agreement", "bar: ≥ 85%", "Whether the AI judge itself tracks human labels closely enough to trust.");
+  var faithSection = section("EXPLANATION FAITHFULNESS","Is it honest?",
+    '<div class="grid">'+faithCards+'</div>');
+
+  // E. Gate catalog
+  var gateSection = section("GATE CATALOG · H1–H10","The audit trail", gateTable(e));
+
+  // F. Harness integrity — not exported in this snapshot
+  var harness = section("HARNESS INTEGRITY","Can the harness itself be trusted?",
+    '<div class="panel panel-pad"><ul class="mini-list">'
+    + '<li class="warn"><span class="dot"></span><span><strong>Mutation testing.</strong> Not exported in this snapshot. <span style="color:var(--faint)">not yet measured</span></span></li>'
+    + '<li class="warn"><span class="dot"></span><span><strong>Reliability / pass@k.</strong> The two stochastic surfaces (vector retrieval, LLM judge) were not exercised in this deterministic calibration run. <span style="color:var(--faint)">not yet measured</span></span></li>'
+    + '<li class="warn"><span class="dot"></span><span><strong>Test pyramid.</strong> Layer 1–3 last-run status not exported for this snapshot.</span></li>'
+    + '</ul></div>');
+
+  var ptLabels={detached:"Detached",semi:"Semi-detached",terraced:"Terraced",flat:"Flat"};
+  var ctx = '<div class="eval-context"><span class="ctx-label">Showing</span>'
+    + '<button type="button" class="ctx-chip" aria-pressed="true" onclick="switchTab(\'valuation\')" title="Change on the Valuation tab">'+d.label+'</button>'
+    + '<button type="button" class="ctx-chip" aria-pressed="true" onclick="switchTab(\'valuation\')" title="Change on the Valuation tab">'+ptLabels[state.ptype]+'</button>'
+    + '</div>';
+  host.innerHTML = ctx + '<div class="section">'+banner+'</div>' + accSection + retrSection + faithSection + gateSection + harness;
+}
+
+function kpiPending(title,bar,def){
+  return '<div class="kpi"><div class="k-title">'+title+'<span class="chip muted">not yet measured</span></div>'
+    + '<div class="k-val" style="color:var(--faint);">—</div>'
+    + '<div class="k-bar">'+bar+'</div>'
+    + '<div class="k-def">'+def+'</div></div>';
+}
+function residualSummary(e){
+  return '<div class="panel panel-pad" style="margin-top:14px;">'
+    + '<div class="k-title" style="margin-bottom:10px;">Residual summary <span style="color:var(--faint);font-weight:400;">(aggregate stats; per-property scatter not exported in this snapshot)</span></div>'
+    + '<div class="cal-meta">'
+    + calMeta("MAE", e.mae.toFixed(1)+"%")
+    + calMeta("q80 |residual|", e.q80.toFixed(1)+"%")
+    + calMeta("Median bias", PCT(e.bias))
+    + calMeta("High-tier coverage", e.highTier.toFixed(1)+"%")
+    + '</div>'
+    + '<p class="chart-cap" style="margin-top:10px;">The calibration report exports aggregate residual statistics only, so the predicted-vs-actual scatter is omitted rather than mocked with invented points.</p>'
+    + '</div>';
+}
+
+function calMeta(k,v,warn){ return '<div><span class="cm-k">'+k+'</span><span class="cm-v"'+(warn?' style="color:var(--warn)"':'')+'>'+v+'</span></div>'; }
+function kpi(title,val,fail,bar,def){
+  var cls = fail ? " warn" : " pass";
+  return '<div class="kpi'+(fail?' fail':'')+'">'
+    + '<div class="k-title">'+title+'<span class="chip '+(fail?'warn':'pass')+'">'+(fail?'attention':'pass')+'</span></div>'
+    + '<div class="k-val'+cls+'">'+val+'</div>'
+    + '<div class="k-bar">'+bar+'</div>'
+    + '<div class="k-def">'+def+'</div></div>';
+}
+function section(kicker,title,inner){
+  return '<div class="section"><div class="section-head"><span class="s-kicker">'+kicker+'</span><h2>'+title+'</h2></div>'+inner+'</div>';
+}
+function availBar(label,pct){
+  return '<div style="margin:8px 0;"><div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);"><span>'+label+'</span><span class="mono">'+pct+'%</span></div>'
+    + '<div class="range-track" style="margin:5px 0 0;"><div class="range-fill" style="left:0;width:'+pct+'%;background:'+(pct>=80?'var(--pass-line)':'var(--warn-line)')+';"></div></div></div>';
+}
+function gateTable(e){
+  var mark = { pass:["✓","g-pass"], fail:["✗","g-fail"], pend:["—","g-bar"] };
+  var gates = [
+    ["H1","Geography-gate correctness","deterministic","100%","100%","pass"],
+    ["H2","Source provenance","deterministic","100%","100%","pass"],
+    ["H3","recall@20","retrieval","≥ 0.95","not run","pend"],
+    ["H4","MAE","deterministic","< 5%",e.mae.toFixed(1)+"%",e.mae<5?"pass":"fail"],
+    ["H5","Bias","deterministic","±2%",PCT(e.bias),Math.abs(e.bias)<=2?"pass":"fail"],
+    ["H6","Directional hit rate","deterministic","≥ 70%",e.hitRate.toFixed(1)+"%",e.hitCI[0]>=70?"pass":"fail"],
+    ["H7","Abstain precision / recall","deterministic","≥ 0.80",e.abstain.precision.toFixed(2)+" / "+e.abstain.recall.toFixed(2),(e.abstain.precision>=0.80&&e.abstain.recall>=0.80)?"pass":"fail"],
+    ["H8","Single-label / Step D","deterministic","100%","100%","pass"],
+    ["H9","Sq ft provenance","deterministic","100%","100%","pass"],
+    ["H10","Faithfulness","judge","≥ 4/5","not run","pend"]
+  ];
+  var rows = gates.map(function(g){
+    var m = mark[g[5]];
+    return '<tr><td class="g-id">'+g[0]+'</td><td>'+g[1]+'<div class="g-method">'+g[2]+'</div></td>'
+      + '<td class="g-bar">'+g[3]+'</td><td class="g-score">'+g[4]+'</td>'
+      + '<td class="'+m[1]+'">'+m[0]+'</td></tr>';
+  }).join("");
+  return '<div class="panel panel-pad" style="padding:8px 14px;"><table class="gate-table"><thead><tr><th>ID</th><th>Gate</th><th>Pass-bar</th><th>Latest</th><th>State</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    + '<p class="chart-cap" style="padding:0 12px 10px;">H1, H2, H8, H9 hold by construction (deterministic guards). H4–H7 are the calibration results. H3 and H10 cover the retrieval and LLM-judge surfaces, which were not run on this snapshot.</p></div>';
+}
+
+/* ---------- Tabs ---------- */
+function switchTab(tab){
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.setAttribute("aria-selected", b.dataset.tab===tab ? "true":"false");
+  });
+  document.getElementById("tab-valuation").hidden = tab!=="valuation";
+  document.getElementById("tab-evals").hidden = tab!=="evals";
+  if(tab==="evals") renderEvals();
+}
+document.querySelectorAll('.tabs button').forEach(function(b){
+  b.addEventListener("click", function(){ switchTab(b.dataset.tab); });
+});
+
+/* ---------- Inputs ---------- */
+document.getElementById("area-select").addEventListener("change", function(e){
+  state.area = e.target.value; state.computed = computeValuation();
+  renderValuation();
+  if(!document.getElementById("tab-evals").hidden) renderEvals();
+});
+document.getElementById("ptype-select").addEventListener("change", function(e){
+  state.ptype = e.target.value;
+  if(state.computed){ state.computed = computeValuation(); renderValuation(); }
+});
+document.getElementById("value-btn").addEventListener("click", function(){
+  state.computed = computeValuation(); renderValuation();
+});
+document.getElementById("asking-input").addEventListener("keydown", function(e){
+  if(e.key==="Enter"){ state.computed = computeValuation(); renderValuation(); }
+});
+
+/* ---------- Theme: fixed to dark ---------- */
+
+/* ---------- First paint ---------- */
+state.computed = computeValuation();
+renderValuation();
+</script>
+</body>
+</html>
