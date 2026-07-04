@@ -1,5 +1,7 @@
 # Fair Price: a UK house-price estimator that reports its own confidence
 
+**Live demo: [kasiatokarska.com/house-price-fair-estimate.html](https://kasiatokarska.com/house-price-fair-estimate.html)**
+
 A UK property valuation tool built only on open data, designed around one idea: a model that
 knows when it does not know. It produces a fair-value estimate and range from past sales, rates
 its own confidence, abstains when its methods disagree, and refuses to publish verdicts for any
